@@ -20,7 +20,8 @@ CREATE TABLE Regiao (
 
 CREATE TABLE UF (
     co_uf numeric(2) NOT NULL PRIMARY KEY,                                              -- Código do UF
-    nome_uf varchar(100) NOT NULL                                                       -- Nome do UF
+    nome_uf varchar(100) NOT NULL,                                                      -- Nome do UF
+    sigla_uf varchar(2) NOT NULL                                                        -- Sigla do UF
 );
 
 
