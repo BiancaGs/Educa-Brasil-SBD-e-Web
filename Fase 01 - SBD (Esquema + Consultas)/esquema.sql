@@ -1,11 +1,11 @@
 
 --- Tipos Criados
 
-CREATE TYPE binario_t AS ENUM('Sim', 'Não');
+CREATE TYPE binario_t AS ENUM('Sim', 'Não', '-1');
 
-CREATE TYPE situacao_funcionamento_t AS ENUM('Em atividade', 'Paralisada', 'Extinta');
-CREATE TYPE dependencia_adm_t AS ENUM('Federal', 'Estadual', 'Municipal', 'Privada');
-CREATE TYPE localizacao_t AS ENUM('Urbana', 'Rural');
+CREATE TYPE situacao_funcionamento_t AS ENUM('Em atividade', 'Paralisada', 'Extinta', '-1');
+CREATE TYPE dependencia_adm_t AS ENUM('Federal', 'Estadual', 'Municipal', 'Privada', '-1');
+CREATE TYPE localizacao_t AS ENUM('Urbana', 'Rural', '-1');
 
 
 --- Tabela Região
@@ -65,8 +65,8 @@ CREATE TABLE Escola (
     co_escola numeric(8) NOT NULL PRIMARY KEY,                                          -- Código da Escola
     nome_escola varchar(100) NOT NULL,                                                  -- Nome da Escola
     situacao_funcionamento situacao_funcionamento_t,                                    -- Situação de Funcionamento da Escola
-    inicio_ano_letivo DATE NOT NULL,                                                    -- Data de Início do Ano Letivo
-    termino_ano_letivo DATE NOT NULL,                                                   -- Data de Término do Ano Letivo
+    inicio_ano_letivo DATE,                                                             -- Data de Início do Ano Letivo
+    termino_ano_letivo DATE,                                                            -- Data de Término do Ano Letivo
     
     co_regiao numeric(1) NOT NULL                                                       -- Código da Região
         REFERENCES Regiao(co_regiao)
@@ -90,9 +90,9 @@ CREATE TABLE Escola (
     dependencia_adm dependencia_adm_t,                                                  -- Tipo de Dependência Administrativa da Escola
     localizacao localizacao_t,                                                          -- Área da Localização da Escola
     regulamentada binario_t,                                                            -- Se a Escola é regulamentada ou não
-    qtd_salas_existentes integer NOT NULL,                                              -- Número de salas existentes na escola
-    qtd_salas_utilizadas integer NOT NULL,                                              -- Número de salas sendo efetivamente utilizadas na escola
-    qtd_funcionarios integer NOT NULL,                                                  -- Número de funcionários da escola
+    qtd_salas_existentes integer,                                                       -- Número de salas existentes na escola
+    qtd_salas_utilizadas integer,                                                       -- Número de salas sendo efetivamente utilizadas na escola
+    qtd_funcionarios integer,                                                           -- Número de funcionários da escola
     
     --- * Informações Adicionais sobre a Escola
     agua_filtrada binario_t,                                                            -- Se a Escola possui água filtrada ou não
