@@ -1,0 +1,13 @@
+
+/* =======================================================
+   HEADER PRINCIPAL
+   ======================================================= */
+
+.icone-header {
+    height: 30px;
+    width: 30px;
+}
+
+.navbar-brand {
+    text-transform: uppercase;
+}

@@ -6,13 +6,48 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Educa Brasil - Página Principal</title>
+        
+        <!-- CSS -->
+        <link rel="stylesheet" href="lib/mdbootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="lib/mdbootstrap/css/mdb.css">
+        <link rel="stylesheet" href="css/educa_brasil.css">
+
     </head>
-    
+
     <body>
         
         <!-- Header -->
         <header id="header-principal">
-                        
+            
+            <!-- Barra de Navegação -->
+            <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top" id="barra-navegacao">
+                
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#!"><img src="img/icones/Books.png" alt="Icone do Site" class="icone-header"> <strong>Educa Brasil</strong></a>
+                </div>
+                    
+                <button class="navbar-toggler">
+                    <span class="navbar-toggler-icon" data-toggle="collapse" data-target="#navbarMenu"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarMenu">
+
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#!">Sobre</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#!">Escolas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#!">Estátísticas</a>
+                        </li>
+                    </ul>
+
+                </div>
+        
+            </nav>
+
         </header>
 
         <!-- Main -->
@@ -24,6 +59,13 @@
         <footer id="footer-principal">
 
         </footer>
+
+
+        <!-- Javascript -->
+        <script src="lib/jquery/jquery-3.3.1.min.js"></script>
+        <script src="lib/mdbootstrap/js/bootstrap.js"></script>
+        <script src="lib/mdbootstrap/js/mdb.js"></script>
+        <!-- <script src="lib/popper/popper.min.js"></script> -->
 
     </body>
 
