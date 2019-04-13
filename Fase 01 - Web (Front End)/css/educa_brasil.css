@@ -1,5 +1,25 @@
 
 /* =======================================================
+   CONFIGURACOES GERAIS
+   ======================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+}
+html, body {
+    height: 100%;
+}
+#main-principal {
+    min-height: 100%;
+}
+#footer-principal {
+    position: relative;
+    clear: both;
+}
+
+
+/* =======================================================
    HEADER PRINCIPAL
    ======================================================= */
 
@@ -10,4 +30,7 @@
 
 .navbar-brand {
     text-transform: uppercase;
+}
+.nav-item:hover {
+    background-color: #bdbdbd;
 }
