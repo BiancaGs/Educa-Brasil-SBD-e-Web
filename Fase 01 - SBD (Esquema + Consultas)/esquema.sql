@@ -21,7 +21,12 @@ CREATE TABLE Regiao (
 CREATE TABLE UF (
     co_uf numeric(2) NOT NULL PRIMARY KEY,                                              -- Código do UF
     nome_uf varchar(100) NOT NULL,                                                      -- Nome do UF
-    sigla_uf varchar(2) NOT NULL                                                        -- Sigla do UF
+    sigla_uf varchar(2) NOT NULL,                                                       -- Sigla do UF
+
+    -- Chaves Estrangeiras
+    co_regiao numeric(1) NOT NULL
+        REFERENCES Regiao(co_regiao)
+        ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
 
@@ -29,7 +34,12 @@ CREATE TABLE UF (
 
 CREATE TABLE Mesorregiao (
     co_mesorregiao numeric(4) NOT NULL PRIMARY KEY,                                     -- Código da Mesorregião
-    nome_mesorregiao varchar(100) NOT NULL                                              -- Nome da Messorregião 
+    nome_mesorregiao varchar(100) NOT NULL,                                             -- Nome da Messorregião 
+
+    -- Chaves Estrangeiras
+    co_uf numeric(2) NOT NULL
+        REFERENCES UF(co_uf)
+        ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
 
@@ -37,7 +47,12 @@ CREATE TABLE Mesorregiao (
 
 CREATE TABLE Microrregiao (
     co_microrregiao numeric(5) NOT NULL PRIMARY KEY,                                    -- Código da Microrregião
-    nome_microrregiao varchar(100) NOT NULL                                             -- Nome da Microrregião
+    nome_microrregiao varchar(100) NOT NULL,                                            -- Nome da Microrregião
+
+    -- Chaves Estrangeiras
+    co_mesorregiao numeric(4) NOT NULL
+        REFERENCES Mesorregiao(co_mesorregiao)
+        ON DELETE RESTRICT ON UPDATE RESTRICT      
 );
 
 
@@ -45,7 +60,12 @@ CREATE TABLE Microrregiao (
 
 CREATE TABLE Municipio (
     co_municipio numeric(7) NOT NULL PRIMARY KEY,                                       -- Código do Município
-    nome_municipio varchar(100) NOT NULL                                                -- Nome do Município
+    nome_municipio varchar(100) NOT NULL,                                               -- Nome do Município
+    
+    -- Chaves Estrangeiras
+    co_microrregiao numeric(5) NOT NULL
+        REFERENCES Microrregiao(co_microrregiao)
+        ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
 
@@ -53,7 +73,12 @@ CREATE TABLE Municipio (
 
 CREATE TABLE Distrito (
     co_distrito numeric(9) NOT NULL PRIMARY KEY,                                        -- Código do Distrito
-    nome_distrito varchar(100) NOT NULL                                                 -- Nome do Distrito
+    nome_distrito varchar(100) NOT NULL,                                                -- Nome do Distrito
+
+    -- Chaves Estrangeiras
+    co_municipio numeric(7) NOT NULL
+        REFERENCES Municipio(co_municipio)
+        ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
 
@@ -68,27 +93,14 @@ CREATE TABLE Escola (
     inicio_ano_letivo DATE,                                                             -- Data de Início do Ano Letivo
     termino_ano_letivo DATE,                                                            -- Data de Término do Ano Letivo
     
-    co_regiao numeric(1) NOT NULL                                                       -- Código da Região
-        REFERENCES Regiao(co_regiao)
-        ON DELETE RESTRICT ON UPDATE RESTRICT,                                    
-    co_uf numeric(2) NOT NULL                                                           -- Código do UF
-        REFERENCES UF(co_uf)
-        ON DELETE RESTRICT ON UPDATE RESTRICT,
-    co_mesorregiao numeric(4) NOT NULL                                                  -- Código da Mesorregião
-        REFERENCES Mesorregiao(co_mesorregiao)
-        ON DELETE RESTRICT ON UPDATE RESTRICT,
-    co_microrregiao numeric(5) NOT NULL                                                 -- Código da Microrregião
-        REFERENCES Microrregiao(co_microrregiao)
-        ON DELETE RESTRICT ON UPDATE RESTRICT,
-    co_municipio numeric(7) NOT NULL                                                    -- Código do Município
-        REFERENCES Municipio(co_municipio)
-        ON DELETE RESTRICT ON UPDATE RESTRICT,
+    -- * Informações de localização
     co_distrito numeric(9) NOT NULL                                                     -- Código Completo do Distrito da Escola
         REFERENCES Distrito(co_distrito)
         ON DELETE RESTRICT ON UPDATE RESTRICT,
+    localizacao localizacao_t,                                                          -- Área da Localização da Escola
+
 
     dependencia_adm dependencia_adm_t,                                                  -- Tipo de Dependência Administrativa da Escola
-    localizacao localizacao_t,                                                          -- Área da Localização da Escola
     regulamentada binario_t,                                                            -- Se a Escola é regulamentada ou não
     qtd_salas_existentes integer,                                                       -- Número de salas existentes na escola
     qtd_salas_utilizadas integer,                                                       -- Número de salas sendo efetivamente utilizadas na escola
