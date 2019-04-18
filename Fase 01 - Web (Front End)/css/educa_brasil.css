@@ -37,7 +37,7 @@ html, body {
     font-size: 15px;
 }
 .nav-item {
-    margin-left: 42px;
+    margin-left: 20px;
 }
 
 .navbar-brand {
@@ -49,18 +49,14 @@ html, body {
 }
 
 
-#header-principal {
-    margin-top: 5.5rem;
-}
-
-
 /* =======================================================
    NAVBAR BUSCA
    ======================================================= */
 
 #busca {
     height: 45px;
-    border-bottom: 1px solid #707070;
+    margin-top: 5.5rem;
+    border-bottom: 1.5px solid #707070;
 }
 .navbar-busca li {
     background: #fff;
@@ -132,16 +128,6 @@ html, body {
 }
 #busca-principal {
 	width: 275px;
-}
-
-/* Override */
-.navbar.navbar-light form .md-form input:focus:not([readonly]) {
-    border-color: #36923F;
-}
-.md-form input[type=text]:focus:not([readonly]), .md-form input[type=password]:focus:not([readonly]), .md-form input[type=email]:focus:not([readonly]), .md-form input[type=url]:focus:not([readonly]), .md-form input[type=time]:focus:not([readonly]), .md-form input[type=date]:focus:not([readonly]), .md-form input[type=datetime-local]:focus:not([readonly]), .md-form input[type=tel]:focus:not([readonly]), .md-form input[type=number]:focus:not([readonly]), .md-form input[type=search-md]:focus:not([readonly]), .md-form input[type=search]:focus:not([readonly]), .md-form textarea.md-textarea:focus:not([readonly]) {
-    -webkit-box-shadow: 0 1px 0 0 #36923F;
-    box-shadow: 0 1px 0 0 #36923F;
-    border-bottom: 1px solid #36923F;
 }
 
 .h1-verde {
