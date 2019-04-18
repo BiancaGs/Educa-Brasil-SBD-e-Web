@@ -49,6 +49,67 @@ html, body {
 }
 
 
+#header-principal {
+    margin-top: 5.5rem;
+}
+
+
+/* =======================================================
+   NAVBAR BUSCA
+   ======================================================= */
+
+#busca {
+    height: 45px;
+    border-bottom: 1px solid #707070;
+}
+.navbar-busca li {
+    background: #fff;
+    border: 1px solid #707070;
+    height: 28px;
+    margin-right: -5px !important;
+    padding: 0 10px;
+    line-height: 28px;
+    border-right: none;
+    border-left: 0;
+    position: relative;
+    font-size: 12px;
+}
+.navbar-busca li:before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -2px;
+    right: -1px;
+    z-index: 9;
+    border-style: solid;
+    border-width: 16.5px 0 13.5px 10px;
+    border-color: transparent transparent transparent #707070;
+}
+.navbar-busca li:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -1px;
+    right: 0;
+    z-index: 10;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 15.5px 0 12.5px 10px;
+    border-color: transparent transparent transparent #fff;
+}
+.navbar-busca li:first-child {
+    border-radius: 3px 0 0 3px;
+    border-left: 1px solid #707070;
+}
+.navbar-busca li:last-child {
+    border-radius: 0 3px 3px 0;
+    border-right: 1px solid #707070;
+}
+.navbar-busca li:last-child:before, .navbar-busca li:last-child:after {
+    display: none;
+}
+
 /* =======================================================
    RODAPÉ
    ======================================================= */

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Educa Brasil - Página Principal</title>
+
+        <!-- Ícone Principal -->
+        <link rel="shortcut icon" href="img/icones/Books.png" type="image/x-icon">
+        
+        <!-- CSS -->
+        <link rel="stylesheet" href="lib/mdbootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="lib/mdbootstrap/css/mdb.css">
+        <link rel="stylesheet" href="css/educa_brasil.css">
+
+        <!-- Icones -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+    </head>
+
+    <body>
+        
+        <!-- Barra de Navegação -->
+        <nav class="navbar navbar-expand-md navbar-light fixed-top center" id="barra-navegacao">
+        
+            <div class="container">
+            
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="index.html">
+                        <div class="d-flex flex-row align-items-center">
+                            <img src="img/icones/Books.png" alt="Icone do Site" class="icone-header mr-1"> 
+                            <strong>Educa Brasil</strong>
+                        </div>
+                    </a>
+                </div>
+                    
+                <button class="navbar-toggler">
+                    <span class="navbar-toggler-icon" data-toggle="collapse" data-target="#navbarMenu"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarMenu">
+
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#!">Sobre</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#!">Escolas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#!">Estátísticas</a>
+                        </li>
+                        
+                        <form method="POST" action="#!" class="form-inline" id="form-busca-principal">
+                            <i class="fas fa-search fa-flip-horizontal"></i>
+                            <div class="md-form my-0">
+                                <input type="search" name="busca-principal" id="busca-principal" placeholder="Buscar por estado, município ou escola">
+                            </div>
+                        </form>
+                        
+                    </ul>
+
+                </div>
+            
+            </div>
+    
+        </nav>
+
+        <!-- Header -->
+        <header id="header-principal">    
+
+            <!-- Barra de Navegação de Busca -->
+            <div id="busca">
+
+                <div class="container">
+                    <ul class="list-inline navbar-busca">
+                        <li class="list-inline-item">Buscar</li>
+                        <li class="list-inline-item">Estado</li>
+                        <li class="list-inline-item">Município</li>
+                        <li class="list-inline-item">Escola</li>
+                    </ul>
+                </div>
+
+            </div>
+            
+        </header>
+        
+        <!-- Main -->
+        <main id="main-principal">
+            
+            
+
+        </main>
+
+        <!-- Footer -->
+        <footer id="footer-principal" class="p-3">
+            <div class="footer-copy text-center"><strong>2019 &copy; Bianca Gomes Rodrigues, Pietro Zuntini Bonfim</strong></div>
+        </footer>
+
+
+        <!-- Javascript -->
+        <script src="lib/jquery/jquery-3.3.1.min.js"></script>
+        <script src="lib/mdbootstrap/js/bootstrap.js"></script>
+        <script src="lib/mdbootstrap/js/mdb.js"></script>
+        <!-- <script src="lib/popper/popper.min.js"></script> -->
+
+    </body>
+
+</html>
