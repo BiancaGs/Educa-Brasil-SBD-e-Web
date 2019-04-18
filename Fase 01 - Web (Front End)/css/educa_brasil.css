@@ -84,9 +84,9 @@ html, body {
 
     /* Imagem */
     background-image: url(../img/fundos/fundo-lapis.jpg);
-    background-size: 100%;
+    background-size: cover;
     background-repeat: no-repeat;
-    background-position-y: -18rem;
+    background-position: center;
 }
 
 .titulo-principal {
@@ -115,4 +115,68 @@ html, body {
 #btn-start:hover {
     background-color: #9c9c9c;
     box-shadow: 1px 1px 1px 1px rgb(105, 105, 105);
+}
+
+
+/* =======================================================
+   SOBRE
+   ======================================================= */
+
+#sobre {
+    padding: 7rem !important;
+    text-align: center;   
+}
+#sobre h1 {
+    font-size: 27px;
+    color: #36923F;
+    font-weight: 500;
+}
+#sobre p {
+    font-size: 17px;
+}
+#sobre .img {
+    height: 174px;
+    width: 174px;
+}
+
+.situacao {
+    background-image: url(../img/sobre/situacoes.png);
+    background-size: 82%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-position-y: 28px;
+    background-color: #878787;
+}
+
+.dependencias {
+    background-image: url(../img/sobre/dependencias.png);
+    background-size: 140%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-position-x: -65px;
+}
+
+.ofertas-matricula {
+    background-image: url(../img/sobre/oferta.png);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    
+}
+
+.caracteristicas {
+    margin-top: 50px;
+}
+.caracteristicas ul li {
+    list-style-type: none;
+    padding: 0;
+}
+.caracteristicas ul {
+    font-size: 17px;
+}
+
+.rounded-circle{
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
 }
