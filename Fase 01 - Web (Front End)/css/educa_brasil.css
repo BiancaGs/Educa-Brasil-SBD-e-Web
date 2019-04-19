@@ -164,6 +164,17 @@ html, body {
 
 
 /* =======================================================
+   OVERRRIDES
+   ======================================================= */
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    color: #fff;
+    border-color: var(--azul-escuro) !important;
+    background-color: var(--azul-escuro) !important;
+}
+
+
+/* =======================================================
    HERO PRINCIPAL
    ======================================================= */
 
@@ -288,4 +299,36 @@ html, body {
 #grafico-brasil {
     width: 100%;
     height: 500px;
+}
+
+
+/* =======================================================
+   FILTROS ESCOLAS
+   ======================================================= */
+
+#resultado-busca h1 {
+    margin-bottom: 1rem;
+}
+
+
+#filtros {
+    border: 1px solid black;
+    border-radius: 7px;
+    width: 350px;
+    padding: 18px 25px;
+}
+#filtros p {
+    margin: 10px 0 0 0;
+    padding: 0;
+}
+button#aplicar-filtros {
+    border: none;
+    font-size: 20px;
+}
+button#aplicar-filtros:hover {
+    background-color: rgb(108, 148, 48);
+}
+
+.filtros-dependencias .custom-control {
+    margin-right: 14px;
 }
