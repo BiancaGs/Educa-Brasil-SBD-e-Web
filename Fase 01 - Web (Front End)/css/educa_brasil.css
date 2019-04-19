@@ -278,8 +278,14 @@ html, body {
     padding: 7rem !important;
     background-color: rgb(238, 237, 237);
     min-height: 80vh;
-    background-image: url(../img/fundos/grafico.png);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+}
+
+
+/* =======================================================
+   GRÁFICO - INDEX
+   ======================================================= */
+
+#grafico-brasil {
+    width: 100%;
+    height: 500px;
 }
