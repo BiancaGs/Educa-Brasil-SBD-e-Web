@@ -1,5 +1,31 @@
 
 /* =======================================================
+   CORES
+   ======================================================= */
+
+:root {
+    --verde-escuro: #36923F;
+    --verde-claro: #88BC3C;
+    --azul-escuro: #002776;
+    --font-60: 40px;
+    --font-40: 27px;
+    --font-30: 20px;
+    --font-25: 17px;
+    --font-20: 13px;
+}
+
+.verde-escuro-text {color: var(--verde-escuro);}
+.verde-claro-text {color: var(--verde-claro);}
+.azul-escuro-text {color: var(--azul-escuro);}
+
+.bg-verde-escuro {background-color: var(--verde-escuro);}
+.bg-verde-claro {background-color: var(--verde-claro);}
+.bg-azul-escuro {background-color: var(--azul-escuro);}
+
+.semibold {font-weight: 500;}
+
+
+/* =======================================================
    CONFIGURACOES GERAIS
    ======================================================= */
 
@@ -186,8 +212,12 @@ html, body {
    ======================================================= */
 
 #sobre {
-    padding: 7rem !important;
-    text-align: center;   
+    padding: 10rem !important;
+    text-align: center;  
+}
+#sobre p, #sobre li, #sobre-estatisticas p {
+    color: #797979;
+    font-weight: 400;
 }
 #sobre p {
     font-size: 17px;
@@ -247,7 +277,7 @@ html, body {
 #sobre-estatisticas {
     padding: 7rem !important;
     background-color: rgb(238, 237, 237);
-    min-height: 100vh;
+    min-height: 80vh;
     background-image: url(../img/fundos/grafico.png);
     background-size: cover;
     background-repeat: no-repeat;
