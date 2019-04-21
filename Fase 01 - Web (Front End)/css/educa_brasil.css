@@ -142,6 +142,10 @@ body {
 #footer-principal {
     background-color: #36923F;
     color: white;
+    border-top: 5px solid var(--azul-escuro);
+}
+.footer-copy {
+    font-weight: 500;
 }
 
 
@@ -217,7 +221,6 @@ body {
 }
 #btn-start:hover {
     background-color: #9c9c9c;
-    box-shadow: 1px 1px 1px 1px rgb(105, 105, 105);
 }
 
 
