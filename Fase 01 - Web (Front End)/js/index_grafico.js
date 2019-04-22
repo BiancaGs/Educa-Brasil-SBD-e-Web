@@ -22,6 +22,10 @@ chart.chartContainer.wheelable = false;
 chart.seriesContainer.events.disableType("doublehit");
 chart.chartContainer.background.events.disableType("doublehit");
 
+// Desabilitar efeito de arrastar
+chart.seriesContainer.draggable = false;
+chart.seriesContainer.resizable = false;
+
 // Set map definition
 chart.geodata = am4geodata_brazilLow;
 
