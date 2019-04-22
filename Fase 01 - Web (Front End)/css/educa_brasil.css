@@ -384,3 +384,16 @@ button#aplicar-filtros:hover {
 ul.info {
     list-style-type: none;
 }
+
+
+/* =======================================================
+   GRÁFICOS ESTATÍSTICAS
+   ======================================================= */
+
+.grafico-est {
+    width: 100%;
+    height: 500px;
+}
+#estatisticas-gerais .row {
+    margin-bottom: 50px;
+}
