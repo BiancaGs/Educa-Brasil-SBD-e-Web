@@ -358,3 +358,29 @@ button#aplicar-filtros:hover {
     border: 1px solid black;
     padding: 10px 5px;
 }
+
+
+/* =======================================================
+   MODAL ESCOLAS
+   ======================================================= */
+
+#modal-escola .modal-dialog .modal-content {
+    border-radius: 15px;
+    padding: 20px;
+}
+#modal-escola-label {
+    font-weight: 600;
+}
+
+.info-card {
+    margin-bottom: 30px;
+}
+.info-card-title {
+    text-transform: uppercase;
+    color: var(--verde-claro);
+    font-style: italic;
+    clear: both;
+}
+ul.info {
+    list-style-type: none;
+}

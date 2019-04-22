@@ -2,101 +2,103 @@
 
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Educa Brasil - Página Principal</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educa Brasil - Página Principal</title>
 
-        <!-- Ícone Principal -->
-        <link rel="shortcut icon" href="img/icones/Books.png" type="image/x-icon">
-        
-        <!-- CSS -->
-        <link rel="stylesheet" href="lib/mdbootstrap/css/bootstrap.css">
-        <link rel="stylesheet" href="lib/mdbootstrap/css/mdb.css">
-        <link rel="stylesheet" href="css/educa_brasil.css">
-        <link rel="stylesheet" href="css/design-responsivo.css">
-        <link rel="stylesheet" href="css/fontes.css">
+    <!-- Ícone Principal -->
+    <link rel="shortcut icon" href="img/icones/Books.png" type="image/x-icon">
 
-        <!-- Icones -->
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <!-- CSS -->
+    <link rel="stylesheet" href="lib/mdbootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="lib/mdbootstrap/css/mdb.css">
+    <link rel="stylesheet" href="css/educa_brasil.css">
+    <link rel="stylesheet" href="css/design-responsivo.css">
+    <link rel="stylesheet" href="css/fontes.css">
 
-    </head>
+    <!-- Icones -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
-    <body>
-        
-        <!-- Barra de Navegação -->
-        <nav class="navbar navbar-expand-md navbar-light fixed-top center" id="barra-navegacao">
-        
+</head>
+
+<body>
+
+    <!-- Barra de Navegação -->
+    <nav class="navbar navbar-expand-md navbar-light fixed-top center" id="barra-navegacao">
+
+        <div class="container">
+
+            <div class="navbar-header">
+                <a class="navbar-brand" href="index.html">
+                    <div class="d-flex flex-row align-items-center">
+                        <img src="img/icones/Books.png" alt="Icone do Site" class="icone-header mr-1">
+                        <strong>Educa Brasil</strong>
+                    </div>
+                </a>
+            </div>
+
+            <button class="navbar-toggler">
+                <span class="navbar-toggler-icon" data-toggle="collapse" data-target="#navbarMenu"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMenu">
+
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#sobre">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="escolas.html">Escolas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#!">Estátísticas</a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+    <!-- Header -->
+    <header id="header-principal">
+
+        <!-- Barra de Navegação de Busca -->
+        <div id="busca">
+
             <div class="container">
-            
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="index.html">
-                        <div class="d-flex flex-row align-items-center">
-                            <img src="img/icones/Books.png" alt="Icone do Site" class="icone-header mr-1"> 
-                            <strong>Educa Brasil</strong>
-                        </div>
-                    </a>
-                </div>
-                    
-                <button class="navbar-toggler">
-                    <span class="navbar-toggler-icon" data-toggle="collapse" data-target="#navbarMenu"></span>
-                </button>
-                
-                <div class="collapse navbar-collapse" id="navbarMenu">
-
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="index.html#sobre">Sobre</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="escolas.html">Escolas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#!">Estátísticas</a>
-                        </li>
-                        
-                    </ul>
-
-                </div>
-            
+                <ul class="list-inline navbar-busca">
+                    <li class="list-inline-item">Buscar</li>
+                    <li class="list-inline-item">Estado</li>
+                    <li class="list-inline-item">Município</li>
+                    <li class="list-inline-item">Escola</li>
+                </ul>
             </div>
-    
-        </nav>
 
-        <!-- Header -->
-        <header id="header-principal">    
+        </div>
 
-            <!-- Barra de Navegação de Busca -->
-            <div id="busca">
+    </header>
 
-                <div class="container">
-                    <ul class="list-inline navbar-busca">
-                        <li class="list-inline-item">Buscar</li>
-                        <li class="list-inline-item">Estado</li>
-                        <li class="list-inline-item">Município</li>
-                        <li class="list-inline-item">Escola</li>
-                    </ul>
-                </div>
+    <!-- Main -->
+    <main id="main-principal">
 
-            </div>
-            
-        </header>
-        
-        <!-- Main -->
-        <main id="main-principal">
-            
-            <div class="container mt-5" id="resultado-busca">
+        <div class="container mt-5" id="resultado-busca">
 
-                <div class="row">
-                    <div class="col-sm-8">
-    
-                        <h2 class="verde-escuro-text">Resultado da Busca:</h2>
-                        <h3 class="verde-claro-text">São Paulo</h3>
-                        <h4 class="verde-claro-text mt-4">Sorocaba</h4>
+            <div class="row">
+                <div class="col-sm-8">
 
-                        <!-- Escolas -->
-                        <section id="resultado-escolas" class="mt-4">
+                    <h2 class="verde-escuro-text">Resultado da Busca:</h2>
+                    <h3 class="verde-claro-text">São Paulo</h3>
+                    <h4 class="verde-claro-text mt-4">Sorocaba</h4>
 
+                    <!-- Escolas -->
+                    <section id="resultado-escolas" class="mt-4">
+
+                        <a class="waves-effect waves-light" data-toggle="modal" data-target="#modal-escola">
                             <article id="cartao-escola">
                                 <div class="container">
                                     <div class="row">
@@ -122,194 +124,457 @@
                                     </div>
                                 </div>
                             </article>
-
-                        </section>
-                        <!-- Fim Escolas -->
-
-                    </div>
-                    <div class="col">
+                        </a>
                         
-                        <section id="filtros-wrapper">
-            
-                            <h2 class="verde-escuro-text">Filtros:</h2>
-            
-                            <!-- Filtros -->
-                            <article id="filtros">
-            
-                                <div class="filtros-funcionamento">
-                                    <p class="font-weight-bold">Situação de Funcionamento</p>
-                                    
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="em-atividade">
-                                        <label class="custom-control-label" for="em-atividade">Em Atividade</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="paralisada">
-                                        <label class="custom-control-label" for="paralisada">Paralisada</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="extinta">
-                                        <label class="custom-control-label" for="extinta">Extinta</label>
-                                    </div>
+                    </section>
+                    <!-- Fim Escolas -->
 
+                    <!-- Modal Informações Escolas -->
+                    <div class="modal fade" id="modal-escola" tabindex="-1" role="dialog" aria-labelledby="modal-escola" aria-hidden="true">
+
+                        <!-- Change class .modal-sm to change the size of the modal -->
+                        <div class="modal-dialog modal-xl" role="document">
+
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <div class="d-flex flex-column">
+                                        <h5 class="verde-escuro-text" id="modal-escola-label">21114978 - UNIDADE INTEGRADA DE EDUCACAO ESCOLAR INDIGENA MONTE SIAO</h5>
+                                        <h6>Nordeste - Maranhão - Leste Maranhanse - Chapada do Alto Itapecuru - Jenipapo dos Vieiras - Jenipapo dos Vieiras</h6>
+                                    </div>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
+                                <div class="modal-body">
+                                    <div class="container">
+                                        
+                                        <div class="row">
+                                            <div class="col-sm-7">
 
-                                <div class="filtros-dependencia-adm">
-                                    <p class="font-weight-bold">Dependência Administrativa</p>
-                                    
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="federal">
-                                        <label class="custom-control-label" for="federal">Federal</label>
+                                                <div class="info-card">
+                                                    <h6 class="info-card-title">informações de localização</h6>
+                                                    <ul class="info">
+                                                       <li class="row">
+                                                           <div class="col">Região:</div>
+                                                           <div class="col">Nordeste</div>
+                                                       </li>
+                                                       <li class="row">
+                                                            <div class="col">Estado:</div>
+                                                            <div class="col">Maranhão - MA</div>
+                                                        </li>
+                                                        <li class="row">
+                                                            <div class="col">Mesorregião:</div>
+                                                            <div class="col">Leste Maranhense</div>
+                                                        </li>                                                      
+                                                        <li class="row">
+                                                            <div class="col">Microrregião:</div>
+                                                            <div class="col">Chapadas do Alto do Itaperucu</div>
+                                                        </li>
+                                                        <li class="row">
+                                                            <div class="col">Município:</div>
+                                                            <div class="col">Jenipapo das Vieiras</div>
+                                                        </li>                                                      
+                                                        <li class="row">
+                                                            <div class="col">Distrito:</div>
+                                                            <div class="col">Jenipapo das Vieiras</div>
+                                                        </li>                                                      
+                                                        <li class="row">
+                                                            <div class="col">Localização:</div>
+                                                            <div class="col">Rural</div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+                                                <div class="info-card">
+                                                    <h6 class="info-card-title">ofertas de matrícula</h6>
+                                                    <ul class="info">
+                                                        <li class="row">
+                                                            <div class="col">Creche:</div>
+                                                            <div class="col">Não</div>
+                                                        </li>                                                      
+                                                        <li class="row">
+                                                            <div class="col">Pré-Escola:</div>
+                                                            <div class="col">Não</div>
+                                                        </li> 
+                                                        <li class="row">
+                                                            <div class="col">Ensino Fundamental - 1º ao 4º:</div>
+                                                            <div class="col">Sim</div>
+                                                        </li>                                                      
+                                                        <li class="row">
+                                                            <div class="col">Ensino Fundamental - 5º ao 8º:</div>
+                                                            <div class="col">Não</div>
+                                                        </li>                                                      
+                                                        <li class="row">
+                                                            <div class="col">Ensino Médio Normal:</div>
+                                                            <div class="col">Não</div>
+                                                        </li>
+                                                        <li class="row">
+                                                            <div class="col">Ensino Média Integrado:</div>
+                                                            <div class="col">Não</div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                
+                                                <div class="info-card">
+                                                    <h6 class="info-card-title">dependências da escola</h6>
+                                                    <ul class="info">
+                                                        <li class="row">
+                                                            <div class="col">Sala de Diretoria:</div>
+                                                            <div class="col">Não</div>
+                                                        </li>                                                      
+                                                        <li class="row">
+                                                            <div class="col">Sala de Professores:</div>
+                                                            <div class="col">Não</div>
+                                                        </li> 
+                                                        <li class="row">
+                                                            <div class="col">Laboratório de Informática:</div>
+                                                            <div class="col">Sim</div>
+                                                        </li>                                                      
+                                                        <li class="row">
+                                                            <div class="col">Laboratório de Ciências:</div>
+                                                            <div class="col">Não</div>
+                                                        </li>                                                      
+                                                        <li class="row">
+                                                            <div class="col">Quadra de Esportes:</div>
+                                                            <div class="col">Não</div>
+                                                        </li>
+                                                        <li class="row">
+                                                            <div class="col">Biblioteca:</div>
+                                                            <div class="col">Não</div>
+                                                        </li> 
+                                                        <li class="row">
+                                                            <div class="col">Sala de Leitura:</div>
+                                                            <div class="col">Não</div>
+                                                        </li> 
+                                                        <li class="row">
+                                                            <div class="col">Parque Infantil:</div>
+                                                            <div class="col">Não</div>
+                                                        </li> 
+                                                        <li class="row">
+                                                            <div class="col">Bercário:</div>
+                                                            <div class="col">Não</div>
+                                                        </li> 
+                                                        <li class="row">
+                                                            <div class="col">Secretaria:</div>
+                                                            <div class="col">Não</div>
+                                                        </li> 
+                                                        <li class="row">
+                                                            <div class="col">Auditório:</div>
+                                                            <div class="col">Não</div>
+                                                        </li> 
+                                                        <li class="row">
+                                                            <div class="col">Área Verde:</div>
+                                                            <div class="col">Não</div>
+                                                        </li>
+                                                    </ul>
+
+                                                </div>
+
+                                            </div>
+                                            <!-- Fim col -->
+
+                                            <div class="col-sm-5">
+
+                                                <div class="info-card">
+                                                    <h6 class="info-card-title">informações gerais</h6>
+                                                    <ul class="info">
+                                                        <li class="row">
+                                                            <div class="col">Situação de Funcionamento:</div>
+                                                            <div class="col">Em Atividade</div>
+                                                        </li>
+                                                        <li class="row">
+                                                            <div class="col">Início do Ano Letivo:</div>
+                                                            <div class="col">05/02/2018</div>
+                                                        </li>
+                                                        <li class="row">
+                                                            <div class="col">Término do Ano Letivo:</div>
+                                                            <div class="col">21/12/2018</div>
+                                                        </li>                                                      
+                                                        <li class="row">
+                                                            <div class="col">Dep. Administrativa:</div>
+                                                            <div class="col">Estadual</div>
+                                                        </li>
+                                                        <li class="row">
+                                                            <div class="col">Qtd. de Salas:</div>
+                                                            <div class="col">3</div>
+                                                        </li>                                                      
+                                                        <li class="row">
+                                                            <div class="col">Qtd. de Funcionários:</div>
+                                                            <div class="col">7</div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+                                                <div class="info-card">
+                                                    <h6 class="info-card-title">saneamento básico</h6>
+                                                    <ul class="info">
+                                                       <li class="row">
+                                                           <div class="col">Água Filtrada:</div>
+                                                           <div class="col">Não</div>
+                                                       </li>
+                                                       <li class="row">
+                                                            <div class="col">Esgoto:</div>
+                                                            <div class="col">Não</div>
+                                                        </li>
+                                                        <li class="row">
+                                                            <div class="col">Coleta de Lixo:</div>
+                                                            <div class="col">Não</div>
+                                                        </li>
+                                                        <li class="row">
+                                                            <div class="col">Reciclagem:</div>
+                                                            <div class="col">Não</div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+                                                <div class="info-card">
+                                                    <h6 class="info-card-title">alimentação</h6>
+                                                    <ul class="info">
+                                                       <li class="row">
+                                                           <div class="col">Alimentação:</div>
+                                                           <div class="col">Não</div>
+                                                       </li>
+                                                       <li class="row">
+                                                            <div class="col">Cozinha:</div>
+                                                            <div class="col">Não</div>
+                                                        </li>
+                                                        <li class="row">
+                                                            <div class="col">Refeitório:</div>
+                                                            <div class="col">Não</div>
+                                                        </li>                                                      
+                                                    </ul>
+                                                </div>
+
+                                                <div class="info-card">
+                                                    <h6 class="info-card-title">moradia</h6>
+                                                    <ul class="info">
+                                                       <li class="row">
+                                                           <div class="col">Alojamento para Alunos:</div>
+                                                           <div class="col">Não</div>
+                                                       </li>
+                                                       <li class="row">
+                                                            <div class="col">Alojamento para Professores:</div>
+                                                            <div class="col">Não</div>
+                                                        </li>                                                    
+                                                    </ul>
+                                                </div>
+
+                                                <div class="info-card">
+                                                    <h6 class="info-card-title">acesso à internet</h6>
+                                                    <ul class="info">
+                                                       <li class="row">
+                                                           <div class="col">Internet:</div>
+                                                           <div class="col">Não</div>
+                                                       </li>
+                                                    </ul>
+                                                </div>
+
+                                            </div>
+                                            <!-- Fim col -->
+
+                                        </div>
+                                        <!-- Fim row -->
                                     </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="estadual">
-                                        <label class="custom-control-label" for="estadual">Estadual</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="municipal">
-                                        <label class="custom-control-label" for="municipal">Municipal</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="particular">
-                                        <label class="custom-control-label" for="particular">Particular</label>
-                                    </div>
+                                    <!-- Fim container -->
                                 </div>
-
-                                <div class="filtros-ofertas">
-                                    <p class="font-weight-bold">Ofertas de Matrícula</p>
-                                
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="creche">
-                                        <label class="custom-control-label" for="creche">Creche</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="pre-escola">
-                                        <label class="custom-control-label" for="pre-escola">Pré Escola</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="ef-1">
-                                        <label class="custom-control-label" for="ef-1">Ensino Fundamental - 1º ao 4º</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="ef-2">
-                                        <label class="custom-control-label" for="ef-2">Ensino Fundamental - 5º ao 8º</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="ensino-medio">
-                                        <label class="custom-control-label" for="ensino-medio">Ensino Médio Normal</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="ensino-medio-int">
-                                        <label class="custom-control-label" for="ensino-medio-int">Ensino Médio Integrado</label>
-                                    </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light"
+                                        data-dismiss="modal">fechar</button>
                                 </div>
-
-                                <div class="filtros-dependencias d-flex flex-row flex-wrap">
-                                    <p class="font-weight-bold">Dependências da Escola</p>
-
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="agua-filtrada">
-                                        <label class="custom-control-label" for="agua-filtrada">Água Filtrada</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="esgoto">
-                                        <label class="custom-control-label" for="esgoto">Esgoto</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="coleta-lixo">
-                                        <label class="custom-control-label" for="coleta-lixo">Coleta de Lixo</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="reciclagem">
-                                        <label class="custom-control-label" for="reciclagem">Reciclagem</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="lab-info">
-                                        <label class="custom-control-label" for="lab-info">Laboratório de Informática</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="lab-ciencias">
-                                        <label class="custom-control-label" for="lab-ciencias">Laboratório de Ciências</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="quadra">
-                                        <label class="custom-control-label" for="quadra">Quadra de Esportes</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="cozinha">
-                                        <label class="custom-control-label" for="cozinha">Cozinha</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="biblioteca">
-                                        <label class="custom-control-label" for="biblioteca">Biblioteca</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="sala-leitura">
-                                        <label class="custom-control-label" for="sala-leitura">Sala de Leitura</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="parque-infantil">
-                                        <label class="custom-control-label" for="parque-infantil">Parque Infantil</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="bercario">
-                                        <label class="custom-control-label" for="bercario">Bercário</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="auditorio">
-                                        <label class="custom-control-label" for="auditorio">Auditório</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="refeitorio">
-                                        <label class="custom-control-label" for="refeitorio">Refeitório</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="aloj-alunos">
-                                        <label class="custom-control-label" for="aloj-alunos">Alojamento para Alunos</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="aloj-prof">
-                                        <label class="custom-control-label" for="aloj-prof">Alojamento para Professores</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="area-verde">
-                                        <label class="custom-control-label" for="area-verde">Área Verde</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="internet">
-                                        <label class="custom-control-label" for="internet">Internet</label>
-                                    </div>
-                                </div>
-            
-                                <!-- Botão para aplicar os filtros -->
-                                <button class="text-uppercase w-100 p-1 mt-4 bg-verde-claro white-text" id="aplicar-filtros">aplicar filtros</button>
-
-                            </article>
-                            <!-- Fim dos filtros -->
-                        </section>
-                        <!-- Fim da seção de filtros -->
+                            </div>
+                        </div>
                     </div>
-                    <!-- Fim da coluna de filtros -->
+                    <!-- Modal Informações Escolas -->
+
                 </div>
-                <!-- Fim da row -->
+                <div class="col">
 
+                    <section id="filtros-wrapper">
+
+                        <h2 class="verde-escuro-text">Filtros:</h2>
+
+                        <!-- Filtros -->
+                        <article id="filtros">
+
+                            <div class="filtros-funcionamento">
+                                <p class="font-weight-bold">Situação de Funcionamento</p>
+
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="em-atividade">
+                                    <label class="custom-control-label" for="em-atividade">Em Atividade</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="paralisada">
+                                    <label class="custom-control-label" for="paralisada">Paralisada</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="extinta">
+                                    <label class="custom-control-label" for="extinta">Extinta</label>
+                                </div>
+
+                            </div>
+
+                            <div class="filtros-dependencia-adm">
+                                <p class="font-weight-bold">Dependência Administrativa</p>
+
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="federal">
+                                    <label class="custom-control-label" for="federal">Federal</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="estadual">
+                                    <label class="custom-control-label" for="estadual">Estadual</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="municipal">
+                                    <label class="custom-control-label" for="municipal">Municipal</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="particular">
+                                    <label class="custom-control-label" for="particular">Particular</label>
+                                </div>
+                            </div>
+
+                            <div class="filtros-ofertas">
+                                <p class="font-weight-bold">Ofertas de Matrícula</p>
+
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="creche">
+                                    <label class="custom-control-label" for="creche">Creche</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="pre-escola">
+                                    <label class="custom-control-label" for="pre-escola">Pré Escola</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="ef-1">
+                                    <label class="custom-control-label" for="ef-1">Ensino Fundamental - 1º ao 4º</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="ef-2">
+                                    <label class="custom-control-label" for="ef-2">Ensino Fundamental - 5º ao 8º</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="ensino-medio">
+                                    <label class="custom-control-label" for="ensino-medio">Ensino Médio Normal</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="ensino-medio-int">
+                                    <label class="custom-control-label" for="ensino-medio-int">Ensino Médio
+                                        Integrado</label>
+                                </div>
+                            </div>
+
+                            <div class="filtros-dependencias d-flex flex-row flex-wrap">
+                                <p class="font-weight-bold">Dependências da Escola</p>
+
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="agua-filtrada">
+                                    <label class="custom-control-label" for="agua-filtrada">Água Filtrada</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="esgoto">
+                                    <label class="custom-control-label" for="esgoto">Esgoto</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="coleta-lixo">
+                                    <label class="custom-control-label" for="coleta-lixo">Coleta de Lixo</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="reciclagem">
+                                    <label class="custom-control-label" for="reciclagem">Reciclagem</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="lab-info">
+                                    <label class="custom-control-label" for="lab-info">Laboratório de
+                                        Informática</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="lab-ciencias">
+                                    <label class="custom-control-label" for="lab-ciencias">Laboratório de
+                                        Ciências</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="quadra">
+                                    <label class="custom-control-label" for="quadra">Quadra de Esportes</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="cozinha">
+                                    <label class="custom-control-label" for="cozinha">Cozinha</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="biblioteca">
+                                    <label class="custom-control-label" for="biblioteca">Biblioteca</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="sala-leitura">
+                                    <label class="custom-control-label" for="sala-leitura">Sala de Leitura</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="parque-infantil">
+                                    <label class="custom-control-label" for="parque-infantil">Parque Infantil</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="bercario">
+                                    <label class="custom-control-label" for="bercario">Bercário</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="auditorio">
+                                    <label class="custom-control-label" for="auditorio">Auditório</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="refeitorio">
+                                    <label class="custom-control-label" for="refeitorio">Refeitório</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="aloj-alunos">
+                                    <label class="custom-control-label" for="aloj-alunos">Alojamento para Alunos</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="aloj-prof">
+                                    <label class="custom-control-label" for="aloj-prof">Alojamento para
+                                        Professores</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="area-verde">
+                                    <label class="custom-control-label" for="area-verde">Área Verde</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="internet">
+                                    <label class="custom-control-label" for="internet">Internet</label>
+                                </div>
+                            </div>
+
+                            <!-- Botão para aplicar os filtros -->
+                            <button class="text-uppercase w-100 p-1 mt-4 bg-verde-claro white-text"
+                                id="aplicar-filtros">aplicar filtros</button>
+
+                        </article>
+                        <!-- Fim dos filtros -->
+                    </section>
+                    <!-- Fim da seção de filtros -->
+                </div>
+                <!-- Fim da coluna de filtros -->
             </div>
-            <!-- Fim do Container -->
+            <!-- Fim da row -->
 
-        </main>
+        </div>
+        <!-- Fim do Container -->
 
-        <!-- Footer -->
-        <footer id="footer-principal" class="p-3">
-            <div class="footer-copy text-center">&copy; 2019 Copyright: Bianca Gomes Rodrigues, Pietro Zuntini Bonfim</div>
-        </footer>
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer-principal" class="p-3">
+        <div class="footer-copy text-center">&copy; 2019 Copyright: Bianca Gomes Rodrigues, Pietro Zuntini Bonfim</div>
+    </footer>
 
 
-        <!-- Javascript -->
-        <script src="lib/jquery/jquery-3.3.1.min.js"></script>
-        <script src="lib/mdbootstrap/js/bootstrap.js"></script>
-        <script src="lib/mdbootstrap/js/mdb.js"></script>
-        <!-- <script src="lib/popper/popper.min.js"></script> -->
+    <!-- Javascript -->
+    <script src="lib/jquery/jquery-3.3.1.min.js"></script>
+    <script src="lib/mdbootstrap/js/bootstrap.js"></script>
+    <script src="lib/mdbootstrap/js/mdb.js"></script>
+    <!-- <script src="lib/popper/popper.min.js"></script> -->
 
-    </body>
+</body>
 
 </html>
