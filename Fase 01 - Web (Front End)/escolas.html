@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="css/educa_brasil.css">
     <link rel="stylesheet" href="css/design-responsivo.css">
     <link rel="stylesheet" href="css/fontes.css">
+    <link rel="stylesheet" href="lib/select2/css/select2.min.css">
 
     <!-- Icones -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
@@ -73,7 +74,13 @@
             <div class="container">
                 <ul class="list-inline navbar-busca">
                     <li class="list-inline-item">Buscar</li>
-                    <li class="list-inline-item">Estado</li>
+                    <li class="list-inline-item">
+                        <select name="select-estado" id="select-estado">
+                            <option value="SP">São Paulo</option>
+                            <option value="GO">Goiás</option>
+                            <option value="RJ">Rio de Janeiro</option>
+                        </select>
+                    </li>
                     <li class="list-inline-item">Município</li>
                     <li class="list-inline-item">Escola</li>
                 </ul>
@@ -573,7 +580,9 @@
     <script src="lib/jquery/jquery-3.3.1.min.js"></script>
     <script src="lib/mdbootstrap/js/bootstrap.js"></script>
     <script src="lib/mdbootstrap/js/mdb.js"></script>
-    <!-- <script src="lib/popper/popper.min.js"></script> -->
+    <script src="lib/select2/js/select2.min.js"></script>
+
+    <script src="js/escolas.js"></script>
 
 </body>
 

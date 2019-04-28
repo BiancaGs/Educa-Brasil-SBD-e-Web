@@ -135,6 +135,28 @@ body {
     display: none;
 }
 
+
+/* SELECTS */
+.navbar-busca select {
+    border: none;
+    cursor: pointer;
+}
+.navbar-busca select:hover {
+    background-color: #f3f3f3;
+}
+
+.select2-container--default .select2-selection--single {
+    background-color: unset !important;
+    border: none !important;
+}
+.select2-dropdown {
+    font-size: 12px;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-color: #36923F transparent transparent transparent !important;
+}
+
+
 /* =======================================================
    RODAPÉ
    ======================================================= */
