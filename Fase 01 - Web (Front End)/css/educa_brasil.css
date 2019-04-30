@@ -156,6 +156,10 @@ body {
     border-color: #36923F transparent transparent transparent !important;
 }
 
+.select2-container {
+    width: 100% !important;
+}
+
 
 /* =======================================================
    RODAPÉ
