@@ -363,8 +363,10 @@ li.filtro {
     margin-right: 10px;
 }
 
-.filtros-dropdown {
+.filtros-dropdown.closed {
     display: none;
+}
+.filtros-dropdown {
     position: absolute;
     min-width: 320px;
     max-width: 360px;
@@ -374,6 +376,7 @@ li.filtro {
     background: white;
 }
 .filtros-botoes {
+    margin-top: 2rem;
     float: right;
 }
 .filtros-botoes button {

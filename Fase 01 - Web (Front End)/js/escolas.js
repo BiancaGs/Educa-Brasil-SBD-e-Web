@@ -51,12 +51,18 @@ $(document).ready(function() {
 // =======================================================
 
 $(document).click(function() {
-    $('.filtros-dropdown').hide();
+    $('.filtros-dropdown').addClass('closed');
 });
 
 $(document).on("click", ".btn-filtro", function(e) {
     e.preventDefault();
     e.stopPropagation();
+
+    // Fecha todos os drop
+    $('.filtros-dropdown').addClass('closed');
+    
+    // Abre o que clicou
     var dropdown = $(this).parent().children('.filtros-dropdown');
-    dropdown.toggle();
+    dropdown.removeClass('closed');
+    dropdown.addClass('opened');
 });
