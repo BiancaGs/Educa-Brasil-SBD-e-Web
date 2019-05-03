@@ -44,3 +44,19 @@ $(document).ready(function() {
     inicializaDataTable(); 
 
 });
+
+
+// =======================================================
+// Controle dos dropdowns de filtros
+// =======================================================
+
+$(document).click(function() {
+    $('.filtros-dropdown').hide();
+});
+
+$(document).on("click", ".btn-filtro", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var dropdown = $(this).parent().children('.filtros-dropdown');
+    dropdown.toggle();
+});

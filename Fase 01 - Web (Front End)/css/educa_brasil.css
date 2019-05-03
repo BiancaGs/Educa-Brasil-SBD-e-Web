@@ -359,8 +359,12 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
 ul.filtros {
     list-style-type: none;
 }
+li.filtro {
+    margin-right: 10px;
+}
 
 .filtros-dropdown {
+    display: none;
     position: absolute;
     min-width: 320px;
     max-width: 360px;

@@ -105,11 +105,11 @@
 
             <div class="container my-3">
 
-                <ul class="filtros">
+                <ul class="filtros d-flex flex-row">
 
                     <li class="filtro">
                         <form action="" class="form-filtro">
-                            <button class="btn-filtro">
+                            <button type="button" class="btn-filtro">
                                 <span class="filtro-nome">Situação de Funcionamento</span>
                                 <li-icon>
                                     <i class="fas fa-caret-down fa-lg"></i>
@@ -128,6 +128,85 @@
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="extinta">
                                         <label class="custom-control-label" for="extinta">Extinta</label>
+                                    </div>
+                                    <div class="filtros-botoes">
+                                        <button class="filtros-btn-cancelar">Cancelar</button>
+                                        <button class="filtros-btn-aplicar">Aplicar</button>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </form>
+                    </li>
+
+                    <li class="filtro">
+                        <form action="" class="form-filtro">
+                            <button type="button" class="btn-filtro">
+                                <span class="filtro-nome">Dependência Administrativa</span>
+                                <li-icon>
+                                    <i class="fas fa-caret-down fa-lg"></i>
+                                </li-icon>
+                            </button>
+                            <div class="filtros-dropdown">
+                                <fieldset>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="federal">
+                                        <label class="custom-control-label" for="federal">Federal</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="estadual">
+                                        <label class="custom-control-label" for="estadual">Estadual</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="municipal">
+                                        <label class="custom-control-label" for="municipal">Municipal</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="particular">
+                                        <label class="custom-control-label" for="particular">Particular</label>
+                                    </div>
+                                    <div class="filtros-botoes">
+                                        <button class="filtros-btn-cancelar">Cancelar</button>
+                                        <button class="filtros-btn-aplicar">Aplicar</button>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </form>
+                    </li>
+
+                    <li class="filtro">
+                        <form action="" class="form-filtro">
+                            <button type="button" class="btn-filtro">
+                                <span class="filtro-nome">Ofertas de Matrícula</span>
+                                <li-icon>
+                                    <i class="fas fa-caret-down fa-lg"></i>
+                                </li-icon>
+                            </button>
+                            <div class="filtros-dropdown">
+                                <fieldset>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="creche">
+                                        <label class="custom-control-label" for="creche">Creche</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="pre-escola">
+                                        <label class="custom-control-label" for="pre-escola">Pré Escola</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="ef-1">
+                                        <label class="custom-control-label" for="ef-1">Ensino Fundamental - 1º ao 4º</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="ef-2">
+                                        <label class="custom-control-label" for="ef-2">Ensino Fundamental - 5º ao 8º</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="ensino-medio">
+                                        <label class="custom-control-label" for="ensino-medio">Ensino Médio Normal</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="ensino-medio-int">
+                                        <label class="custom-control-label" for="ensino-medio-int">Ensino Médio
+                                            Integrado</label>
                                     </div>
                                     <div class="filtros-botoes">
                                         <button class="filtros-btn-cancelar">Cancelar</button>
