@@ -101,6 +101,49 @@
 
         </div>
 
+        <section id="secao-filtros">
+
+            <div class="container my-3">
+
+                <ul class="filtros">
+
+                    <li class="filtro">
+                        <form action="" class="form-filtro">
+                            <button class="btn-filtro">
+                                <span class="filtro-nome">Situação de Funcionamento</span>
+                                <li-icon>
+                                    <i class="fas fa-caret-down fa-lg"></i>
+                                </li-icon>
+                            </button>
+                            <div class="filtros-dropdown">
+                                <fieldset>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="em-atividade">
+                                        <label class="custom-control-label" for="em-atividade">Em Atividade</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="paralisada">
+                                        <label class="custom-control-label" for="paralisada">Paralisada</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="extinta">
+                                        <label class="custom-control-label" for="extinta">Extinta</label>
+                                    </div>
+                                    <div class="filtros-botoes">
+                                        <button class="filtros-btn-cancelar">Cancelar</button>
+                                        <button class="filtros-btn-aplicar">Aplicar</button>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </form>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </section>
+
     </header>
 
     <!-- Main -->
@@ -129,7 +172,7 @@
                     </thead>
 
                     <tbody id="escolas-datatable">
-                        <tr class="escola" codigo-escola="21114978">
+                        <tr class="escola" codigo-escola="21114978" data-toggle="modal" data-target="#modal-escola">
                             <td class="t-codigo">21114978</td>
                             <td class="t-nome">UNIDADE INTEGRADA DE EDUCACAO ESCOLAR INDIGENA MONTE SIAO</td>
                             <td class="t-situacao">Em Atividade</td>
@@ -159,34 +202,6 @@
 
                 </table>
                 <!-- Fim da Tabela de Escolas -->
-
-                <a class="waves-effect waves-light" data-toggle="modal" data-target="#modal-escola">
-                    <article id="cartao-escola">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-sm-8" id="id-nome">
-                                    21114978 - UNIDADE INTEGRADA DE EDUCACAO ESCOLAR INDIGENA MONTE SIAO
-                                </div>
-                                <div class="col text-right" id="dep-adm">
-                                    Pública
-                                </div>
-                            </div>
-                            <div class="row" id="situacao-ofertas">
-                                <div class="col" id="situacao">
-                                    Em Atividade
-                                </div>
-                                <div class="col text-right" id="ofertas">
-                                    <span class="badge badge-pill badge-light">C</span>
-                                    <span class="badge badge-pill badge-light">PE</span>
-                                    <span class="badge badge-pill badge-light">EFI</span>
-                                    <span class="badge badge-pill badge-light">EFII</span>
-                                    <span class="badge badge-pill badge-light">EM</span>
-                                    <span class="badge badge-pill badge-light">EMI</span>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                </a>
                 
             </section>
             <!-- Fim Escolas -->
