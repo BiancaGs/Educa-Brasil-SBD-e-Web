@@ -52,12 +52,17 @@ $(document).ready(function() {
 
 $(document).click(function() {
     $('.filtros-dropdown').addClass('closed');
-    $('.filtros-dropdown').removeClass('opened');
+    $('.filtros-dropdown').removeClass('opened');    
+});
+
+// Para a propagação do clique dentro do dropdown
+$(document).on('click', '.filtros-dropdown', function(e) {
+    e.stopPropagation();
 });
 
 $(document).on("click", ".btn-filtro", function(e) {
-    e.preventDefault();
     e.stopPropagation();
+    e.preventDefault();
 
     // Abre o que clicou
     var dropdown = $(this).parent().children('.filtros-dropdown');
