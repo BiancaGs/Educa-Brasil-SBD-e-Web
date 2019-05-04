@@ -52,17 +52,25 @@ $(document).ready(function() {
 
 $(document).click(function() {
     $('.filtros-dropdown').addClass('closed');
+    $('.filtros-dropdown').removeClass('opened');
 });
 
 $(document).on("click", ".btn-filtro", function(e) {
     e.preventDefault();
     e.stopPropagation();
 
-    // Fecha todos os drop
-    $('.filtros-dropdown').addClass('closed');
-    
     // Abre o que clicou
     var dropdown = $(this).parent().children('.filtros-dropdown');
+    if (dropdown.hasClass('opened')) {        
+        dropdown.removeClass('opened');
+        dropdown.addClass('closed');
+        return;
+    }
+
+    // Fecha todos os drop
+    $('.filtros-dropdown').addClass('closed');
+    $('.filtros-dropdown').removeClass('opened');
+    
     dropdown.removeClass('closed');
     dropdown.addClass('opened');
 });
