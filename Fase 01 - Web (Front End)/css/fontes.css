@@ -43,3 +43,8 @@
         color: var(--cinza);
         text-transform: uppercase;
     }
+
+    .navbar-busca li:first-of-type {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: bold;
+    }
