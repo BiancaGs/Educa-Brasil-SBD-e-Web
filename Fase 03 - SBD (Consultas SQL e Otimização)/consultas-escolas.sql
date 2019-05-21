@@ -264,6 +264,246 @@ Notebook Bianca:
 
 
 
+------------------------------------------------------------------------------------------------------------------------------
+
+-- Quando o Usuário selecionar um Estado
+
+    -- Na tabela
+    SELECT *
+    FROM escola e
+    WHERE e.co_distrito IN (
+        SELECT d.co_distrito
+        FROM distrito d
+        WHERE d.co_municipio IN (
+            SELECT m.co_municipio
+            FROM municipio m
+            WHERE m.co_microrregiao IN (
+                SELECT mi.co_microrregiao
+                FROM microrregiao mi
+                WHERE mi.co_mesorregiao IN (
+                    SELECT me.co_mesorregiao
+                    FROM mesorregiao me
+                    WHERE me.co_uf = 35
+                )
+            )
+        )
+    );
+
+    -- No select de Municípios
+    SELECT m.co_municipio
+    FROM municipio m
+    WHERE m.co_microrregiao IN (
+        SELECT mi.co_microrregiao
+        FROM microrregiao mi
+        WHERE mi.co_mesorregiao IN (
+            SELECT me.co_mesorregiao
+            FROM mesorregiao me
+            WHERE me.co_uf = 35
+        )
+    );
+
+
+-- Quando o Usuário selecionar um Município
+
+    -- Na tabela
+    SELECT *
+    FROM escola e
+    WHERE e.co_distrito IN (
+        SELECT d.co_distrito
+        FROM distrito d
+        WHERE d.co_municipio = 3550308
+    );
+
+    -- No select de Escolas
+    SELECT *
+    FROM escola e
+    WHERE e.co_distrito IN (
+        SELECT d.co_distrito
+        FROM distrito d
+        WHERE d.co_municipio = 3550308
+    );
+
+
+-- Quando o Usuário selecionar uma Escola
+
+    -- Na tabela
+    SELECT *
+    FROM escola e 
+    WHERE e.nome_escola ILIKE '%uirapuru%';
+
 -- =======================================================
 -- CONSULTAS DE FILTROS
 -- =======================================================
+
+-- Filtros vão adicionando cláusulas AND na consulta principal
+
+
+-- =======================================================
+-- CONSULTAS DAS ESTATÍSTICAS
+-- =======================================================
+
+SELECT *
+FROM regiao r;
+
+-- r = 3
+
+--seleciona os ufs
+SELECT *
+FROM uf u
+WHERE u.co_regiao = 3;
+
+-- seleciona as meso
+SELECT me.co_mesorregiao
+FROM mesorregiao me
+WHERE me.co_uf IN (
+    SELECT u.co_uf
+	FROM uf u
+	WHERE u.co_regiao = 3
+);
+
+-- seleciona as micro
+SELECT mi.co_microrregiao
+FROM microrregiao mi
+WHERE mi.co_mesorregiao IN (
+    SELECT me.co_mesorregiao
+	FROM mesorregiao me
+	WHERE me.co_uf IN (
+		SELECT u.co_uf
+		FROM uf u
+		WHERE u.co_regiao = 3
+	)
+);
+
+-- seleciona os municipios
+SELECT m.co_municipio
+FROM municipio m
+WHERE m.co_microrregiao IN (
+	SELECT mi.co_microrregiao
+	FROM microrregiao mi
+	WHERE mi.co_mesorregiao IN (
+		SELECT me.co_mesorregiao
+		FROM mesorregiao me
+		WHERE me.co_uf IN (
+			SELECT u.co_uf
+			FROM uf u
+			WHERE u.co_regiao = 3
+		)
+	)
+);
+
+-- seleciona os distritos
+SELECT d.co_distrito
+FROM distrito d
+WHERE d.co_municipio IN (
+    SELECT m.co_municipio
+	FROM municipio m
+	WHERE m.co_microrregiao IN (
+		SELECT mi.co_microrregiao
+		FROM microrregiao mi
+		WHERE mi.co_mesorregiao IN (
+			SELECT me.co_mesorregiao
+			FROM mesorregiao me
+			WHERE me.co_uf IN (
+				SELECT u.co_uf
+				FROM uf u
+				WHERE u.co_regiao = 3
+			)
+		)
+	)
+);
+
+-- seleciona as escolas
+SELECT e.nome_escola
+FROM escola e
+WHERE e.co_distrito IN (
+    SELECT d.co_distrito
+	FROM distrito d
+	WHERE d.co_municipio IN (
+		SELECT m.co_municipio
+		FROM municipio m
+		WHERE m.co_microrregiao IN (
+			SELECT mi.co_microrregiao
+			FROM microrregiao mi
+			WHERE mi.co_mesorregiao IN (
+				SELECT me.co_mesorregiao
+				FROM mesorregiao me
+				WHERE me.co_uf IN (
+					SELECT u.co_uf
+					FROM uf u
+					WHERE u.co_regiao = 3
+				)
+			)
+		)
+	)
+);
+
+
+-- seleciona as qtd de escolas 'em atividade', 'paralisada' e 'extinta'
+SELECT e.situacao_funcionamento as Situacao, count(e.co_escola) as Quantidade
+FROM escola e
+WHERE e.co_distrito IN (
+    SELECT d.co_distrito
+	FROM distrito d
+	WHERE d.co_municipio IN (
+		SELECT m.co_municipio
+		FROM municipio m
+		WHERE m.co_microrregiao IN (
+			SELECT mi.co_microrregiao
+			FROM microrregiao mi
+			WHERE mi.co_mesorregiao IN (
+				SELECT me.co_mesorregiao
+				FROM mesorregiao me
+				WHERE me.co_uf IN (
+					SELECT u.co_uf
+					FROM uf u
+					WHERE u.co_regiao = 3
+				)
+			)
+		)
+	)
+)
+GROUP BY e.situacao_funcionamento;
+
+11 secs 84 msec.
+3 rows affected.
+
+
+SELECT count(e.co_escola) as qtd_escolas, (
+    	SELECT count(e2.co_escola)
+		FROM escola e2
+		WHERE e2.dependencia_adm = 'Federal'
+	) as qtd_federal, (
+	    SELECT count(e3.co_escola)
+	    FROM escola e3
+	    WHERE e3.dependencia_adm = 'Estadual'
+	) as qtd_estadual, (
+	    SELECT count(e4.co_escola)
+	    FROM escola e4
+	    WHERE e4.dependencia_adm = 'Municipal'
+	) as qtd_municipal, (
+	    SELECT count(e5.co_escola)
+	    FROM escola e5
+	    WHERE e5.dependencia_adm = 'Privada'
+	) as qtd_privada
+FROM escola e
+WHERE e.co_distrito IN (
+    SELECT d.co_distrito
+	FROM distrito d
+	WHERE d.co_municipio IN (
+		SELECT m.co_municipio
+		FROM municipio m
+		WHERE m.co_microrregiao IN (
+			SELECT mi.co_microrregiao
+			FROM microrregiao mi
+			WHERE mi.co_mesorregiao IN (
+				SELECT me.co_mesorregiao
+				FROM mesorregiao me
+				WHERE me.co_uf IN (
+					SELECT u.co_uf
+					FROM uf u
+					WHERE u.co_regiao = 3
+				)
+			)
+		)
+	)
+);
