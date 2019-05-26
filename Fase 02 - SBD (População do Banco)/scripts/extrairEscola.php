@@ -13,14 +13,14 @@
 
     function sim_ou_nao($valor) {
         switch ($valor) {
-            case 0:
-                return 'Não';
+            case '0':
+                return 0;
                 break;
-            case 1:
-                return 'Sim';
+            case '1':
+                return 1;
                 break;
             default:
-                return '-1';
+                return null;
                 break;
         }
     }
@@ -28,7 +28,7 @@
     function formata_data($data) {
 
         if (empty($data))
-            return 'NULL';
+            return null;
 
         $strings = explode('/', $data);
 
@@ -81,20 +81,20 @@
 
             $situacao_funcionamento         = $data[2];
             switch ($situacao_funcionamento) {
-                case 1:
+                case '1':
                     $situacao_funcionamento = "Em atividade";
                     break;
-                case 2:
+                case '2':
                     $situacao_funcionamento = "Paralisada";
                     break;
-                case 3:
+                case '3':
                     $situacao_funcionamento = "Extinta";
                     break;
-                case 4:
+                case '4':
                     $situacao_funcionamento = "Extinta";
                     break;
                 default:
-                    $situacao_funcionamento = "-1";
+                    $situacao_funcionamento = null;
                     break;
             }
 
@@ -110,49 +110,49 @@
 
             $dependencia_adm                = $data[11];
             switch ($dependencia_adm) {
-                case 1:
+                case '1':
                     $dependencia_adm = "Federal";
                     break;
-                case 2:
+                case '2':
                     $dependencia_adm = "Estadual";
                     break;
-                case 3:
+                case '3':
                     $dependencia_adm = "Municipal";
                     break;
-                case 4:
+                case '4':
                     $dependencia_adm = "Privada";
                     break;
                 default:
-                    $dependencia_adm = "-1";
+                    $dependencia_adm = null;
                     break;
             }
 
             $localizacao                    = $data[12];
             switch ($localizacao) {
-                case 1:
+                case '1':
                     $localizacao = "Urbana";
                     break;
-                case 2:
+                case '2':
                     $localizacao = "Rural";
                     break;
                 default:
-                    $localizacao = "-1";
+                    $localizacao = null;
                     break;
             }
 
             $regulamentada                  = $data[13];
             switch ($regulamentada) {
-                case 0:
-                    $regulamentada = "Não";
+                case '0':
+                    $regulamentada = 0;
                     break;
-                case 1:
-                    $regulamentada = "Sim";
+                case '1':
+                    $regulamentada = 1;
                     break;
-                case 2:
-                    $regulamentada = "Não";
+                case '2':
+                    $regulamentada = 0;
                     break;
                 default:
-                    $regulamentada = "-1";
+                    $regulamentada = null;
                     break;
             }
             
@@ -190,14 +190,56 @@
             $ens_medio_normal               = sim_ou_nao($data[44]);
             $ens_medio_integrado            = sim_ou_nao($data[43]);
             
-            $sql = "INSERT INTO escola (co_escola, nome_escola, situacao_funcionamento, inicio_ano_letivo, termino_ano_letivo, co_distrito, dependencia_adm, localizacao, regulamentada, qtd_salas_existentes, qtd_salas_utilizadas, qtd_funcionarios, agua_filtrada, esgoto, coleta_de_lixo, reciclagem, sala_diretoria, sala_professor, laboratorio_informatica, laboratorio_ciencias, quadra_esportes, cozinha, biblioteca, sala_leitura, parque_infantil, bercario, secretaria, refeitorio, alimentacao, auditorio, alojamento_alunos, alojamento_professores, area_verde, internet, creche, pre_escola, ens_fundamental_anos_iniciais, ens_fundamental_anos_finais, ens_medio_normal, ens_medio_integrado, acessibilidade_deficiencia) VALUES ($co_escola, '$nome_escola', '$situacao_funcionamento', $inicio_ano_letivo, $termino_ano_letivo, $co_distrito, '$dependencia_adm', '$localizacao', '$regulamentada', $qtd_salas_existentes, $qtd_salas_utilizadas, $qtd_funcionarios, '$agua_filtrada', '$esgoto', '$coleta_de_lixo', '$reciclagem', '$sala_diretoria', '$sala_professor', '$laboratorio_informatica', '$laboratorio_ciencias', '$quadra_esportes', '$cozinha', '$biblioteca', '$sala_leitura', '$parque_infantil', '$bercario', '$secretaria', '$refeitorio', '$alimentacao', '$auditorio', '$alojamento_alunos', '$alojamento_professores', '$area_verde', '$internet', '$creche', '$pre_escola', '$ens_fundamental_anos_iniciais', '$ens_fundamental_anos_finais', '$ens_medio_normal', '$ens_medio_integrado', '$acessibilidade_deficiencia')";
+            $sql = "INSERT INTO escola (co_escola, nome_escola, situacao_funcionamento, inicio_ano_letivo, termino_ano_letivo, co_distrito, dependencia_adm, localizacao, regulamentada, qtd_salas_existentes, qtd_salas_utilizadas, qtd_funcionarios, agua_filtrada, esgoto, coleta_de_lixo, reciclagem, sala_diretoria, sala_professor, laboratorio_informatica, laboratorio_ciencias, quadra_esportes, cozinha, biblioteca, sala_leitura, parque_infantil, bercario, secretaria, refeitorio, alimentacao, auditorio, alojamento_alunos, alojamento_professores, area_verde, internet, creche, pre_escola, ens_fundamental_anos_iniciais, ens_fundamental_anos_finais, ens_medio_normal, ens_medio_integrado, acessibilidade_deficiencia) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             $stmt = $conexao->prepare($sql);
+
+            $stmt->bindParam(1, $co_escola);
+            $stmt->bindParam(2, $nome_escola);
+            $stmt->bindParam(3, $situacao_funcionamento);
+            $stmt->bindParam(4, $inicio_ano_letivo);
+            $stmt->bindParam(5, $termino_ano_letivo);
+            $stmt->bindParam(6, $co_distrito);
+            $stmt->bindParam(7, $dependencia_adm);
+            $stmt->bindParam(8, $localizacao);
+            $stmt->bindParam(9, $regulamentada);
+            $stmt->bindParam(10, $qtd_salas_existentes);
+            $stmt->bindParam(11, $qtd_salas_utilizadas);
+            $stmt->bindParam(12, $qtd_funcionarios);
+            $stmt->bindParam(13, $agua_filtrada);
+            $stmt->bindParam(14, $esgoto);
+            $stmt->bindParam(15, $coleta_de_lixo);
+            $stmt->bindParam(16, $reciclagem);
+            $stmt->bindParam(17, $sala_diretoria);
+            $stmt->bindParam(18, $sala_professor);
+            $stmt->bindParam(19, $laboratorio_informatica);
+            $stmt->bindParam(20, $laboratorio_ciencias);
+            $stmt->bindParam(21, $quadra_esportes);
+            $stmt->bindParam(22, $cozinha);
+            $stmt->bindParam(23, $biblioteca);
+            $stmt->bindParam(24, $sala_leitura);
+            $stmt->bindParam(25, $parque_infantil);
+            $stmt->bindParam(26, $bercario);
+            $stmt->bindParam(27, $secretaria);
+            $stmt->bindParam(28, $refeitorio);
+            $stmt->bindParam(29, $alimentacao);
+            $stmt->bindParam(30, $auditorio);
+            $stmt->bindParam(31, $alojamento_alunos);
+            $stmt->bindParam(32, $alojamento_professores);
+            $stmt->bindParam(33, $area_verde);
+            $stmt->bindParam(34, $internet);
+            $stmt->bindParam(35, $creche);
+            $stmt->bindParam(36, $pre_escola);
+            $stmt->bindParam(37, $ens_fundamental_anos_iniciais);
+            $stmt->bindParam(38, $ens_fundamental_anos_finais);
+            $stmt->bindParam(39, $ens_medio_normal);
+            $stmt->bindParam(40, $ens_medio_integrado);
+            $stmt->bindParam(41, $acessibilidade_deficiencia);
+
             if (!$stmt->execute()) {
                 array_push($linhas_erro, $row);
                 array_push($erros, $stmt->errorInfo());
             }
-            
         }
 
         $output_linhas = "";
