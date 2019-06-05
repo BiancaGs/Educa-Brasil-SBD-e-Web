@@ -240,6 +240,103 @@ ORDER BY e.qtd_funcionarios;
 "Execution time: 155.371 ms"
 
 
+-- =======================================================
+-- 5 - COM MATERIALIZED VIEW
+-- =======================================================
+
+-- Criação da VIEW
+
+CREATE MATERIALIZED VIEW distritos<co_uf> AS
+SELECT d.co_distrito, d.co_municipio
+FROM distrito d
+WHERE d.co_municipio IN (
+	SELECT m.co_municipio
+	FROM municipio m
+	WHERE m.co_microrregiao IN (
+		SELECT mi.co_microrregiao
+		FROM microrregiao mi
+		WHERE mi.co_mesorregiao IN (
+			SELECT me.co_mesorregiao
+			FROM mesorregiao me
+			WHERE me.co_uf = <co_uf>
+		)
+	)
+)
+
+-- Nova consulta
+
+SELECT  e.co_escola, e.nome_escola, e.situacao_funcionamento, 
+        e.dependencia_adm, e.bercario, e.creche, e.pre_escola,
+        e.ens_fundamental_anos_iniciais, e.ens_fundamental_anos_finais,
+        e.ens_medio_normal, e.ens_medio_integrado
+FROM escola e
+WHERE e.co_distrito in (
+	SELECT co_distrito
+	FROM distritos35 d
+	WHERE d.co_municipio = 3552205
+)
+AND e.nome_escola LIKE '%EDU%'
+ORDER BY e.qtd_funcionarios;
+
+1 secs 613 msec.
+
+"Sort  (cost=8434.01..8434.02 rows=3 width=55) (actual time=92.751..92.758 rows=96 loops=1)"
+"  Sort Key: e.qtd_funcionarios"
+"  Sort Method: quicksort  Memory: 38kB"
+"  ->  Hash Semi Join  (cost=20.99..8433.99 rows=3 width=55) (actual time=63.624..92.638 rows=96 loops=1)"
+"        Hash Cond: (e.co_distrito = d.co_distrito)"
+"        ->  Seq Scan on escola e  (cost=0.00..8360.69 rows=19915 width=64) (actual time=0.036..87.861 rows=30776 loops=1)"
+"              Filter: ((nome_escola)::text ~~ '%EDU%'::text)"
+"              Rows Removed by Filter: 255199"
+"        ->  Hash  (cost=20.98..20.98 rows=1 width=9) (actual time=0.173..0.173 rows=1 loops=1)"
+"              Buckets: 1024  Batches: 1  Memory Usage: 9kB"
+"              ->  Seq Scan on distritos35 d  (cost=0.00..20.98 rows=1 width=9) (actual time=0.160..0.169 rows=1 loops=1)"
+"                    Filter: (co_municipio = '3552205'::numeric)"
+"                    Rows Removed by Filter: 1037"
+"Planning time: 0.368 ms"
+"Execution time: 92.920 ms"
+
+
+-- =======================================================
+-- 6 - INDICE EM e.co_distrito
+-- =======================================================
+
+CREATE INDEX e_co_distrito_index 
+ON escola(co_distrito)
+3 secs 607 msec.
+
+SELECT  e.co_escola, e.nome_escola, e.situacao_funcionamento, 
+        e.dependencia_adm, e.bercario, e.creche, e.pre_escola,
+        e.ens_fundamental_anos_iniciais, e.ens_fundamental_anos_finais,
+        e.ens_medio_normal, e.ens_medio_integrado
+FROM escola e
+WHERE e.co_distrito in (
+	SELECT co_distrito
+	FROM distritos35 d
+	WHERE d.co_municipio = 3552205
+)
+AND e.nome_escola LIKE '%EDU%'
+ORDER BY e.qtd_funcionarios;
+
+482 msec.
+96 rows affected.
+
+"Sort  (cost=40.52..40.53 rows=3 width=55) (actual time=0.857..0.868 rows=96 loops=1)"
+"  Sort Key: e.qtd_funcionarios"
+"  Sort Method: quicksort  Memory: 38kB"
+"  ->  Nested Loop  (cost=21.40..40.50 rows=3 width=55) (actual time=0.296..0.784 rows=96 loops=1)"
+"        ->  HashAggregate  (cost=20.98..20.99 rows=1 width=9) (actual time=0.254..0.254 rows=1 loops=1)"
+"              Group Key: d.co_distrito"
+"              ->  Seq Scan on distritos35 d  (cost=0.00..20.98 rows=1 width=9) (actual time=0.231..0.248 rows=1 loops=1)"
+"                    Filter: (co_municipio = '3552205'::numeric)"
+"                    Rows Removed by Filter: 1037"
+"        ->  Index Scan using e_co_distrito_index on escola e  (cost=0.42..19.48 rows=3 width=64) (actual time=0.039..0.474 rows=96 loops=1)"
+"              Index Cond: (co_distrito = d.co_distrito)"
+"              Filter: ((nome_escola)::text ~~ '%EDU%'::text)"
+"              Rows Removed by Filter: 395"
+"Planning time: 0.497 ms"
+"Execution time: 1.011 ms"
+
 
 -- Consulta 2
 
