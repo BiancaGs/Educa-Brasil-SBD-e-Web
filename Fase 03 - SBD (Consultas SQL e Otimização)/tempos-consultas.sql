@@ -338,6 +338,46 @@ ORDER BY e.qtd_funcionarios;
 "Execution time: 1.011 ms"
 
 
+-- =======================================================
+-- OBSERVAÇÃO
+-- =======================================================
+
+Observamos que na execução da aplicação, a união de GROUP BY com LIMIT/OFFSET era MUITO lenta. Para isso, tivemos que criar um índice em cada view de distritos:
+
+CREATE INDEX distritos<co_uf>_idx_distrito ON distritos<co_uf> (co_distrito)
+
+
+Consulta otimizada (para depois):
+
+SELECT
+	e.co_escola,
+	e.nome_escola,
+	e.situacao_funcionamento,
+	e.dependencia_adm,
+	e.bercario,
+	e.creche,
+	e.pre_escola,
+	e.ens_fundamental_anos_iniciais,
+	e.ens_fundamental_anos_finais,
+	e.ens_medio_normal,
+	e.ens_medio_integrado 
+FROM
+	escola e 
+WHERE
+	EXISTS (
+		SELECT
+			1 
+		FROM
+			distritos35 d 
+		WHERE
+			(
+				e.co_distrito = d.co_distrito
+			)
+	) 
+ORDER BY
+	e.co_escola LIMIT 10 OFFSET 0
+	
+
 -- Consulta 2
 
 -- =======================================================
