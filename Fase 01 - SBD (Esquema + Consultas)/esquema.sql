@@ -59,7 +59,9 @@ CREATE TABLE Microrregiao (
 CREATE TABLE Municipio (
     co_municipio numeric(7) NOT NULL PRIMARY KEY,                                       -- Código do Município
     nome_municipio varchar(100) NOT NULL,                                               -- Nome do Município
-    
+    latitude double precision,                                                          -- Latitude do Município (para utilização nos mapas)
+    longitude double precision,                                                         -- Longitude do Município (para utilização nos mapas)
+
     -- Chaves Estrangeiras
     co_microrregiao numeric(5) NOT NULL
         REFERENCES Microrregiao(co_microrregiao)
