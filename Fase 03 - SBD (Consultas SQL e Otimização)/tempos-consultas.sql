@@ -342,7 +342,7 @@ ORDER BY e.qtd_funcionarios;
 -- OBSERVAÇÃO
 -- =======================================================
 
-Observamos que na execução da aplicação, a união de GROUP BY com LIMIT/OFFSET era MUITO lenta. Para isso, tivemos que criar um índice em cada view de distritos:
+Observamos que na execução da aplicação, a união de ORDER BY com LIMIT/OFFSET era MUITO lenta. Para isso, tivemos que criar um índice em cada view de distritos:
 
 CREATE INDEX distritos<co_uf>_idx_distrito ON distritos<co_uf> (co_distrito)
 
@@ -384,23 +384,13 @@ ORDER BY
 -- 1 - COM JOIN
 -- =======================================================
 
-SELECT count(e.co_escola) as qtd_escolas, (
-    	SELECT count(e2.co_escola)
-		FROM escola e2
-		WHERE e2.dependencia_adm = 'Federal'
-	) as qtd_federal, (
-	    SELECT count(e3.co_escola)
-	    FROM escola e3
-	    WHERE e3.dependencia_adm = 'Estadual'
-	) as qtd_estadual, (
-	    SELECT count(e4.co_escola)
-	    FROM escola e4
-	    WHERE e4.dependencia_adm = 'Municipal'
-	) as qtd_municipal, (
-	    SELECT count(e5.co_escola)
-	    FROM escola e5
-	    WHERE e5.dependencia_adm = 'Privada'
-	) as qtd_privada
+SELECT
+    GROUPING(e.bercario) g_bercario, GROUPING(e.creche) g_creche, GROUPING(e.pre_escola) g_pe, GROUPING(e.ens_fundamental_anos_iniciais) g_efi,
+    GROUPING(e.ens_fundamental_anos_finais) g_efii, GROUPING(e.ens_medio_normal) g_emn,
+   	GROUPING(e.ens_medio_integrado) g_emi, GROUPING(e.situacao_funcionamento) g_situacao,
+   	GROUPING(e.dependencia_adm) g_dep, GROUPING(e.localizacao) g_localizacao,
+	e.bercario, e.creche, e.pre_escola, e.ens_fundamental_anos_iniciais, e.ens_fundamental_anos_finais, e.ens_medio_normal,
+	e.ens_medio_integrado,e.situacao_funcionamento, e.dependencia_adm, e.localizacao, count(e.co_escola) as qtd_escolas
 FROM escola e
 JOIN distrito d on e.co_distrito = d.co_distrito
 JOIN municipio m on d.co_municipio = m.co_municipio
@@ -408,90 +398,102 @@ JOIN microrregiao m2 on m.co_microrregiao = m2.co_microrregiao
 JOIN mesorregiao m3 on m2.co_mesorregiao = m3.co_mesorregiao
 JOIN uf u on m3.co_uf = u.co_uf
 JOIN regiao r on u.co_regiao = r.co_regiao
-WHERE r.co_regiao = 3;
+WHERE r.co_regiao = 3
+GROUP BY GROUPING SETS (
+	(e.situacao_funcionamento),
+	(e.dependencia_adm),
+	(e.localizacao),
+	(e.bercario),
+	(e.creche),
+    (e.pre_escola),
+    (e.ens_fundamental_anos_iniciais),
+    (e.ens_fundamental_anos_finais),
+    (e.ens_medio_normal),
+    (e.ens_medio_integrado),
+	()
+);
 
-2 secs 522 msec.
-1 rows affected.
+31 rows affected.
+
+3 secs 284 msec.
+3 secs 334 msec.
+6 secs 375 msec.
+5 secs 529 msec.
+3 secs 553 msec.
+3 secs 166 msec.
+
+Média: 4 secs 206 msec.
 
 
-"Aggregate  (cost=60755.66..60755.67 rows=1 width=6) (actual time=548.040..548.040 rows=1 loops=1)"
-"  InitPlan 1 (returns $0)"
-"    ->  Aggregate  (cost=11838.29..11838.30 rows=1 width=6) (actual time=131.124..131.124 rows=1 loops=1)"
-"          ->  Seq Scan on escola e2  (cost=0.00..11836.69 rows=639 width=6) (actual time=0.471..130.623 rows=795 loops=1)"
-"                Filter: (dependencia_adm = 'Federal'::dependencia_adm_t)"
-"                Rows Removed by Filter: 285180"
-"  InitPlan 2 (returns $1)"
-"    ->  Aggregate  (cost=11931.61..11931.62 rows=1 width=6) (actual time=81.856..81.856 rows=1 loops=1)"
-"          ->  Seq Scan on escola e3  (cost=0.00..11836.69 rows=37968 width=6) (actual time=0.055..79.661 rows=37746 loops=1)"
-"                Filter: (dependencia_adm = 'Estadual'::dependencia_adm_t)"
-"                Rows Removed by Filter: 248229"
-"  InitPlan 3 (returns $2)"
-"    ->  Aggregate  (cost=12289.17..12289.18 rows=1 width=6) (actual time=95.282..95.283 rows=1 loops=1)"
-"          ->  Seq Scan on escola e4  (cost=0.00..11836.69 rows=180994 width=6) (actual time=0.025..85.757 rows=181459 loops=1)"
-"                Filter: (dependencia_adm = 'Municipal'::dependencia_adm_t)"
-"                Rows Removed by Filter: 104516"
-"  InitPlan 4 (returns $3)"
-"    ->  Aggregate  (cost=12002.63..12002.64 rows=1 width=6) (actual time=85.683..85.683 rows=1 loops=1)"
-"          ->  Seq Scan on escola e5  (cost=0.00..11836.69 rows=66375 width=6) (actual time=0.028..82.128 rows=65975 loops=1)"
-"                Filter: (dependencia_adm = 'Privada'::dependencia_adm_t)"
-"                Rows Removed by Filter: 220000"
-"  ->  Hash Join  (cost=367.25..12667.45 rows=10592 width=6) (actual time=22.461..149.296 rows=90720 loops=1)"
-"        Hash Cond: (e.co_distrito = d.co_distrito)"
-"        ->  Seq Scan on escola e  (cost=0.00..11121.75 rows=285975 width=15) (actual time=0.048..76.124 rows=285975 loops=1)"
-"        ->  Hash  (cost=362.48..362.48 rows=382 width=9) (actual time=9.882..9.882 rows=3248 loops=1)"
-"              Buckets: 4096 (originally 1024)  Batches: 1 (originally 1)  Memory Usage: 163kB"
-"              ->  Hash Join  (cost=140.02..362.48 rows=382 width=9) (actual time=5.528..8.763 rows=3248 loops=1)"
+"GroupAggregate  (cost=2568.31..9738.11 rows=24 width=25) (actual time=136.184..693.832 rows=31 loops=1)"
+"  Group Key: e.dependencia_adm"
+"  Group Key: ()"
+"  Sort Key: e.pre_escola"
+"    Group Key: e.pre_escola"
+"  Sort Key: e.ens_medio_integrado"
+"    Group Key: e.ens_medio_integrado"
+"  Sort Key: e.ens_medio_normal"
+"    Group Key: e.ens_medio_normal"
+"  Sort Key: e.ens_fundamental_anos_finais"
+"    Group Key: e.ens_fundamental_anos_finais"
+"  Sort Key: e.ens_fundamental_anos_iniciais"
+"    Group Key: e.ens_fundamental_anos_iniciais"
+"  Sort Key: e.situacao_funcionamento"
+"    Group Key: e.situacao_funcionamento"
+"  Sort Key: e.creche"
+"    Group Key: e.creche"
+"  Sort Key: e.bercario"
+"    Group Key: e.bercario"
+"  Sort Key: e.localizacao"
+"    Group Key: e.localizacao"
+"  ->  Sort  (cost=2568.31..2594.79 rows=10592 width=25) (actual time=136.099..155.297 rows=90720 loops=1)"
+"        Sort Key: e.dependencia_adm"
+"        Sort Method: external merge  Disk: 3280kB"
+"        ->  Nested Loop  (cost=151.44..1860.20 rows=10592 width=25) (actual time=6.310..81.444 rows=90720 loops=1)"
+"              ->  Hash Join  (cost=151.02..373.48 rows=382 width=9) (actual time=6.275..9.064 rows=3248 loops=1)"
 "                    Hash Cond: (d.co_municipio = m.co_municipio)"
-"                    ->  Seq Scan on distrito d  (cost=0.00..180.02 rows=10302 width=15) (actual time=0.004..1.124 rows=10302 loops=1)"
-"                    ->  Hash  (cost=137.44..137.44 rows=206 width=6) (actual time=4.323..4.323 rows=1668 loops=1)"
+"                    ->  Seq Scan on distrito d  (cost=0.00..180.02 rows=10302 width=15) (actual time=0.009..1.184 rows=10302 loops=1)"
+"                    ->  Hash  (cost=148.44..148.44 rows=206 width=6) (actual time=4.331..4.331 rows=1668 loops=1)"
 "                          Buckets: 2048 (originally 1024)  Batches: 1 (originally 1)  Memory Usage: 80kB"
-"                          ->  Hash Join  (cost=18.75..137.44 rows=206 width=6) (actual time=1.082..3.451 rows=1668 loops=1)"
+"                          ->  Hash Join  (cost=18.75..148.44 rows=206 width=6) (actual time=1.489..3.651 rows=1668 loops=1)"
 "                                Hash Cond: (m.co_microrregiao = m2.co_microrregiao)"
-"                                ->  Seq Scan on municipio m  (cost=0.00..95.70 rows=5570 width=13) (actual time=0.004..0.984 rows=5570 loops=1)"
-"                                ->  Hash  (cost=18.49..18.49 rows=21 width=7) (actual time=0.412..0.412 rows=160 loops=1)"
+"                                ->  Seq Scan on municipio m  (cost=0.00..106.70 rows=5570 width=13) (actual time=0.011..0.834 rows=5570 loops=1)"
+"                                ->  Hash  (cost=18.49..18.49 rows=21 width=7) (actual time=0.615..0.615 rows=160 loops=1)"
 "                                      Buckets: 1024  Batches: 1  Memory Usage: 15kB"
-"                                      ->  Nested Loop  (cost=5.35..18.49 rows=21 width=7) (actual time=0.156..0.366 rows=160 loops=1)"
-"                                            ->  Seq Scan on regiao r  (cost=0.00..1.06 rows=1 width=10) (actual time=0.005..0.006 rows=1 loops=1)"
+"                                      ->  Nested Loop  (cost=5.35..18.49 rows=21 width=7) (actual time=0.301..0.537 rows=160 loops=1)"
+"                                            ->  Seq Scan on regiao r  (cost=0.00..1.06 rows=1 width=10) (actual time=0.007..0.009 rows=1 loops=1)"
 "                                                  Filter: (co_regiao = '3'::numeric)"
 "                                                  Rows Removed by Filter: 4"
-"                                            ->  Hash Join  (cost=5.35..17.22 rows=21 width=17) (actual time=0.137..0.326 rows=160 loops=1)"
+"                                            ->  Hash Join  (cost=5.35..17.22 rows=21 width=17) (actual time=0.269..0.478 rows=160 loops=1)"
 "                                                  Hash Cond: (m2.co_mesorregiao = m3.co_mesorregiao)"
-"                                                  ->  Seq Scan on microrregiao m2  (cost=0.00..9.58 rows=558 width=12) (actual time=0.004..0.055 rows=558 loops=1)"
-"                                                  ->  Hash  (cost=5.28..5.28 rows=5 width=15) (actual time=0.108..0.108 rows=37 loops=1)"
+"                                                  ->  Seq Scan on microrregiao m2  (cost=0.00..9.58 rows=558 width=12) (actual time=0.009..0.080 rows=558 loops=1)"
+"                                                  ->  Hash  (cost=5.28..5.28 rows=5 width=15) (actual time=0.152..0.152 rows=37 loops=1)"
 "                                                        Buckets: 1024  Batches: 1  Memory Usage: 10kB"
-"                                                        ->  Hash Join  (cost=1.35..5.28 rows=5 width=15) (actual time=0.049..0.094 rows=37 loops=1)"
+"                                                        ->  Hash Join  (cost=1.35..5.28 rows=5 width=15) (actual time=0.077..0.131 rows=37 loops=1)"
 "                                                              Hash Cond: (m3.co_uf = u.co_uf)"
-"                                                              ->  Seq Scan on mesorregiao m3  (cost=0.00..3.37 rows=137 width=10) (actual time=0.003..0.015 rows=137 loops=1)"
-"                                                              ->  Hash  (cost=1.34..1.34 rows=1 width=22) (actual time=0.020..0.020 rows=4 loops=1)"
+"                                                              ->  Seq Scan on mesorregiao m3  (cost=0.00..3.37 rows=137 width=10) (actual time=0.008..0.021 rows=137 loops=1)"
+"                                                              ->  Hash  (cost=1.34..1.34 rows=1 width=22) (actual time=0.026..0.026 rows=4 loops=1)"
 "                                                                    Buckets: 1024  Batches: 1  Memory Usage: 9kB"
-"                                                                    ->  Seq Scan on uf u  (cost=0.00..1.34 rows=1 width=22) (actual time=0.003..0.009 rows=4 loops=1)"
+"                                                                    ->  Seq Scan on uf u  (cost=0.00..1.34 rows=1 width=22) (actual time=0.013..0.017 rows=4 loops=1)"
 "                                                                          Filter: (co_regiao = '3'::numeric)"
 "                                                                          Rows Removed by Filter: 23"
-"Planning time: 2.101 ms"
-"Execution time: 548.666 ms"
+"              ->  Index Scan using e_co_distrito_index on escola e  (cost=0.42..3.46 rows=43 width=34) (actual time=0.004..0.013 rows=28 loops=3248)"
+"                    Index Cond: (co_distrito = d.co_distrito)"
+"Planning time: 1.552 ms"
+"Execution time: 697.639 ms"
 
 
 -- =======================================================
 -- 2 - COM IN
 -- =======================================================
 
-SELECT count(e.co_escola) as qtd_escolas, (
-    	SELECT count(e2.co_escola)
-		FROM escola e2
-		WHERE e2.dependencia_adm = 'Federal'
-	) as qtd_federal, (
-	    SELECT count(e3.co_escola)
-	    FROM escola e3
-	    WHERE e3.dependencia_adm = 'Estadual'
-	) as qtd_estadual, (
-	    SELECT count(e4.co_escola)
-	    FROM escola e4
-	    WHERE e4.dependencia_adm = 'Municipal'
-	) as qtd_municipal, (
-	    SELECT count(e5.co_escola)
-	    FROM escola e5
-	    WHERE e5.dependencia_adm = 'Privada'
-	) as qtd_privada
+SELECT
+    GROUPING(e.bercario) g_bercario, GROUPING(e.creche) g_creche, GROUPING(e.pre_escola) g_pe, GROUPING(e.ens_fundamental_anos_iniciais) g_efi,
+    GROUPING(e.ens_fundamental_anos_finais) g_efii, GROUPING(e.ens_medio_normal) g_emn,
+   	GROUPING(e.ens_medio_integrado) g_emi, GROUPING(e.situacao_funcionamento) g_situacao,
+   	GROUPING(e.dependencia_adm) g_dep, GROUPING(e.localizacao) g_localizacao,
+	e.bercario, e.creche, e.pre_escola, e.ens_fundamental_anos_iniciais, e.ens_fundamental_anos_finais, e.ens_medio_normal,
+	e.ens_medio_integrado,e.situacao_funcionamento, e.dependencia_adm, e.localizacao, count(e.co_escola) as qtd_escolas
 FROM escola e
 WHERE e.co_distrito IN (
     SELECT d.co_distrito
@@ -508,64 +510,182 @@ WHERE e.co_distrito IN (
 				WHERE me.co_uf IN (
 					SELECT u.co_uf
 					FROM uf u
-					WHERE u.co_regiao = 3
+					WHERE u.co_regiao = 2
 				)
+			)
+		)
+	)
+)
+GROUP BY GROUPING SETS (
+	(e.situacao_funcionamento),
+	(e.dependencia_adm),
+	(e.localizacao),
+	(e.bercario),
+	(e.creche),
+    (e.pre_escola),
+    (e.ens_fundamental_anos_iniciais),
+    (e.ens_fundamental_anos_finais),
+    (e.ens_medio_normal),
+    (e.ens_medio_integrado),
+	()
+);
+
+31 rows affected.
+
+2 secs 335 msec.
+2 secs 835 msec.
+2 secs 384 msec.
+2 secs 178 msec.
+2 secs 651 msec.
+
+Média: 2 secs 476 msec.
+
+"GroupAggregate  (cost=2909.37..14102.61 rows=24 width=25) (actual time=166.659..831.167 rows=31 loops=1)"
+"  Group Key: e.dependencia_adm"
+"  Group Key: ()"
+"  Sort Key: e.pre_escola"
+"    Group Key: e.pre_escola"
+"  Sort Key: e.ens_medio_integrado"
+"    Group Key: e.ens_medio_integrado"
+"  Sort Key: e.ens_medio_normal"
+"    Group Key: e.ens_medio_normal"
+"  Sort Key: e.ens_fundamental_anos_finais"
+"    Group Key: e.ens_fundamental_anos_finais"
+"  Sort Key: e.ens_fundamental_anos_iniciais"
+"    Group Key: e.ens_fundamental_anos_iniciais"
+"  Sort Key: e.situacao_funcionamento"
+"    Group Key: e.situacao_funcionamento"
+"  Sort Key: e.creche"
+"    Group Key: e.creche"
+"  Sort Key: e.bercario"
+"    Group Key: e.bercario"
+"  Sort Key: e.localizacao"
+"    Group Key: e.localizacao"
+"  ->  Sort  (cost=2909.37..2949.16 rows=15916 width=25) (actual time=166.572..189.984 rows=111338 loops=1)"
+"        Sort Key: e.dependencia_adm"
+"        Sort Method: external merge  Disk: 4024kB"
+"        ->  Nested Loop  (cost=355.29..1798.58 rows=15916 width=25) (actual time=9.531..100.927 rows=111338 loops=1)"
+"              ->  HashAggregate  (cost=354.87..358.57 rows=370 width=9) (actual time=9.511..10.576 rows=3210 loops=1)"
+"                    Group Key: d.co_distrito"
+"                    ->  Hash Semi Join  (cost=142.76..353.94 rows=370 width=9) (actual time=3.198..7.621 rows=3210 loops=1)"
+"                          Hash Cond: (d.co_municipio = m.co_municipio)"
+"                          ->  Seq Scan on distrito d  (cost=0.00..180.02 rows=10302 width=15) (actual time=0.005..1.172 rows=10302 loops=1)"
+"                          ->  Hash  (cost=140.26..140.26 rows=200 width=6) (actual time=2.991..2.991 rows=1794 loops=1)"
+"                                Buckets: 2048 (originally 1024)  Batches: 1 (originally 1)  Memory Usage: 85kB"
+"                                ->  Hash Semi Join  (cost=16.72..140.26 rows=200 width=6) (actual time=0.464..2.475 rows=1794 loops=1)"
+"                                      Hash Cond: (m.co_microrregiao = mi.co_microrregiao)"
+"                                      ->  Seq Scan on municipio m  (cost=0.00..106.70 rows=5570 width=13) (actual time=0.003..0.529 rows=5570 loops=1)"
+"                                      ->  Hash  (cost=16.47..16.47 rows=20 width=7) (actual time=0.448..0.448 rows=188 loops=1)"
+"                                            Buckets: 1024  Batches: 1  Memory Usage: 16kB"
+"                                            ->  Hash Semi Join  (cost=5.20..16.47 rows=20 width=7) (actual time=0.216..0.396 rows=188 loops=1)"
+"                                                  Hash Cond: (mi.co_mesorregiao = me.co_mesorregiao)"
+"                                                  ->  Seq Scan on microrregiao mi  (cost=0.00..9.58 rows=558 width=12) (actual time=0.004..0.047 rows=558 loops=1)"
+"                                                  ->  Hash  (cost=5.14..5.14 rows=5 width=5) (actual time=0.094..0.094 rows=42 loops=1)"
+"                                                        Buckets: 1024  Batches: 1  Memory Usage: 10kB"
+"                                                        ->  Hash Semi Join  (cost=1.35..5.14 rows=5 width=5) (actual time=0.036..0.077 rows=42 loops=1)"
+"                                                              Hash Cond: (me.co_uf = u.co_uf)"
+"                                                              ->  Seq Scan on mesorregiao me  (cost=0.00..3.37 rows=137 width=10) (actual time=0.003..0.013 rows=137 loops=1)"
+"                                                              ->  Hash  (cost=1.34..1.34 rows=1 width=12) (actual time=0.018..0.018 rows=9 loops=1)"
+"                                                                    Buckets: 1024  Batches: 1  Memory Usage: 9kB"
+"                                                                    ->  Seq Scan on uf u  (cost=0.00..1.34 rows=1 width=12) (actual time=0.006..0.011 rows=9 loops=1)"
+"                                                                          Filter: (co_regiao = '2'::numeric)"
+"                                                                          Rows Removed by Filter: 18"
+"              ->  Index Scan using e_co_distrito_index on escola e  (cost=0.42..3.46 rows=43 width=34) (actual time=0.005..0.018 rows=35 loops=3210)"
+"                    Index Cond: (co_distrito = d.co_distrito)"
+"Planning time: 1.198 ms"
+"Execution time: 842.415 ms"
+
+
+-- =======================================================
+-- CRIAÇÃO DA MATERIALIZED VIEW
+-- =======================================================
+
+CREATE MATERIALIZED VIEW distritos<co_regiao> AS
+SELECT d.co_distrito
+FROM distrito d
+WHERE d.co_municipio IN (
+	SELECT m.co_municipio
+	FROM municipio m
+	WHERE m.co_microrregiao IN (
+		SELECT mi.co_microrregiao
+		FROM microrregiao mi
+		WHERE mi.co_mesorregiao IN (
+			SELECT me.co_mesorregiao
+			FROM mesorregiao me
+			WHERE me.co_uf IN (
+				SELECT u.co_uf
+				FROM uf u
+				WHERE u.co_regiao = <co_regiao>
 			)
 		)
 	)
 );
 
-1 secs 679 msec.
-1 rows affected.
+Consulta:
 
-"Aggregate  (cost=60502.26..60502.27 rows=1 width=6) (actual time=519.606..519.606 rows=1 loops=1)"
-"  InitPlan 1 (returns $0)"
-"    ->  Aggregate  (cost=11838.29..11838.30 rows=1 width=6) (actual time=87.915..87.915 rows=1 loops=1)"
-"          ->  Seq Scan on escola e2  (cost=0.00..11836.69 rows=639 width=6) (actual time=0.367..87.807 rows=795 loops=1)"
-"                Filter: (dependencia_adm = 'Federal'::dependencia_adm_t)"
-"                Rows Removed by Filter: 285180"
-"  InitPlan 2 (returns $1)"
-"    ->  Aggregate  (cost=11931.61..11931.62 rows=1 width=6) (actual time=81.427..81.427 rows=1 loops=1)"
-"          ->  Seq Scan on escola e3  (cost=0.00..11836.69 rows=37968 width=6) (actual time=0.066..79.491 rows=37746 loops=1)"
-"                Filter: (dependencia_adm = 'Estadual'::dependencia_adm_t)"
-"                Rows Removed by Filter: 248229"
-"  InitPlan 3 (returns $2)"
-"    ->  Aggregate  (cost=12289.17..12289.18 rows=1 width=6) (actual time=100.461..100.461 rows=1 loops=1)"
-"          ->  Seq Scan on escola e4  (cost=0.00..11836.69 rows=180994 width=6) (actual time=0.023..90.631 rows=181459 loops=1)"
-"                Filter: (dependencia_adm = 'Municipal'::dependencia_adm_t)"
-"                Rows Removed by Filter: 104516"
-"  InitPlan 4 (returns $3)"
-"    ->  Aggregate  (cost=12002.63..12002.64 rows=1 width=6) (actual time=96.938..96.938 rows=1 loops=1)"
-"          ->  Seq Scan on escola e5  (cost=0.00..11836.69 rows=66375 width=6) (actual time=0.032..92.940 rows=65975 loops=1)"
-"                Filter: (dependencia_adm = 'Privada'::dependencia_adm_t)"
-"                Rows Removed by Filter: 220000"
-"  ->  Hash Semi Join  (cost=347.57..12400.07 rows=16186 width=6) (actual time=23.704..147.957 rows=90720 loops=1)"
-"        Hash Cond: (e.co_distrito = d.co_distrito)"
-"        ->  Seq Scan on escola e  (cost=0.00..11121.75 rows=285975 width=15) (actual time=0.057..75.152 rows=285975 loops=1)"
-"        ->  Hash  (cost=342.94..342.94 rows=370 width=9) (actual time=11.357..11.357 rows=3248 loops=1)"
-"              Buckets: 4096 (originally 1024)  Batches: 1 (originally 1)  Memory Usage: 163kB"
-"              ->  Hash Semi Join  (cost=131.76..342.94 rows=370 width=9) (actual time=4.884..9.510 rows=3248 loops=1)"
-"                    Hash Cond: (d.co_municipio = m.co_municipio)"
-"                    ->  Seq Scan on distrito d  (cost=0.00..180.02 rows=10302 width=15) (actual time=0.004..1.634 rows=10302 loops=1)"
-"                    ->  Hash  (cost=129.26..129.26 rows=200 width=6) (actual time=3.299..3.299 rows=1668 loops=1)"
-"                          Buckets: 2048 (originally 1024)  Batches: 1 (originally 1)  Memory Usage: 80kB"
-"                          ->  Hash Semi Join  (cost=16.72..129.26 rows=200 width=6) (actual time=1.148..2.746 rows=1668 loops=1)"
-"                                Hash Cond: (m.co_microrregiao = mi.co_microrregiao)"
-"                                ->  Seq Scan on municipio m  (cost=0.00..95.70 rows=5570 width=13) (actual time=0.006..0.622 rows=5570 loops=1)"
-"                                ->  Hash  (cost=16.47..16.47 rows=20 width=7) (actual time=0.401..0.401 rows=160 loops=1)"
-"                                      Buckets: 1024  Batches: 1  Memory Usage: 15kB"
-"                                      ->  Hash Semi Join  (cost=5.20..16.47 rows=20 width=7) (actual time=0.139..0.353 rows=160 loops=1)"
-"                                            Hash Cond: (mi.co_mesorregiao = me.co_mesorregiao)"
-"                                            ->  Seq Scan on microrregiao mi  (cost=0.00..9.58 rows=558 width=12) (actual time=0.004..0.059 rows=558 loops=1)"
-"                                            ->  Hash  (cost=5.14..5.14 rows=5 width=5) (actual time=0.108..0.108 rows=37 loops=1)"
-"                                                  Buckets: 1024  Batches: 1  Memory Usage: 10kB"
-"                                                  ->  Hash Semi Join  (cost=1.35..5.14 rows=5 width=5) (actual time=0.045..0.095 rows=37 loops=1)"
-"                                                        Hash Cond: (me.co_uf = u.co_uf)"
-"                                                        ->  Seq Scan on mesorregiao me  (cost=0.00..3.37 rows=137 width=10) (actual time=0.004..0.017 rows=137 loops=1)"
-"                                                        ->  Hash  (cost=1.34..1.34 rows=1 width=12) (actual time=0.021..0.021 rows=4 loops=1)"
-"                                                              Buckets: 1024  Batches: 1  Memory Usage: 9kB"
-"                                                              ->  Seq Scan on uf u  (cost=0.00..1.34 rows=1 width=12) (actual time=0.006..0.013 rows=4 loops=1)"
-"                                                                    Filter: (co_regiao = '3'::numeric)"
-"                                                                    Rows Removed by Filter: 23"
-"Planning time: 1.754 ms"
-"Execution time: 520.121 ms"
+SELECT
+    GROUPING(e.bercario) g_bercario, GROUPING(e.creche) g_creche, GROUPING(e.pre_escola) g_pe, GROUPING(e.ens_fundamental_anos_iniciais) g_efi,
+    GROUPING(e.ens_fundamental_anos_finais) g_efii, GROUPING(e.ens_medio_normal) g_emn,
+   	GROUPING(e.ens_medio_integrado) g_emi, GROUPING(e.situacao_funcionamento) g_situacao,
+   	GROUPING(e.dependencia_adm) g_dep, GROUPING(e.localizacao) g_localizacao,
+	e.bercario, e.creche, e.pre_escola, e.ens_fundamental_anos_iniciais, e.ens_fundamental_anos_finais, e.ens_medio_normal,
+	e.ens_medio_integrado,e.situacao_funcionamento, e.dependencia_adm, e.localizacao, count(e.co_escola) as qtd_escolas
+FROM escola e
+WHERE e.co_distrito IN (
+    SELECT d.co_distrito
+	FROM distritos_regiao3 d
+)
+GROUP BY GROUPING SETS (
+	(e.situacao_funcionamento),
+	(e.dependencia_adm),
+	(e.localizacao),
+	(e.bercario),
+	(e.creche),
+    (e.pre_escola),
+    (e.ens_fundamental_anos_iniciais),
+    (e.ens_fundamental_anos_finais),
+    (e.ens_medio_normal),
+    (e.ens_medio_integrado),
+	()
+);
+
+1 secs 820 msec.
+1 secs 705 msec.
+1 secs 524 msec.
+1 secs 596 msec.
+1 secs 577 msec.
+
+Média: 1 secs 644 msec.
+
+"GroupAggregate  (cost=25335.29..173394.24 rows=24 width=25) (actual time=197.109..747.716 rows=31 loops=1)"
+"  Group Key: e.dependencia_adm"
+"  Group Key: ()"
+"  Sort Key: e.pre_escola"
+"    Group Key: e.pre_escola"
+"  Sort Key: e.ens_medio_integrado"
+"    Group Key: e.ens_medio_integrado"
+"  Sort Key: e.ens_medio_normal"
+"    Group Key: e.ens_medio_normal"
+"  Sort Key: e.ens_fundamental_anos_finais"
+"    Group Key: e.ens_fundamental_anos_finais"
+"  Sort Key: e.ens_fundamental_anos_iniciais"
+"    Group Key: e.ens_fundamental_anos_iniciais"
+"  Sort Key: e.situacao_funcionamento"
+"    Group Key: e.situacao_funcionamento"
+"  Sort Key: e.creche"
+"    Group Key: e.creche"
+"  Sort Key: e.bercario"
+"    Group Key: e.bercario"
+"  Sort Key: e.localizacao"
+"    Group Key: e.localizacao"
+"  ->  Sort  (cost=25335.29..25684.58 rows=139718 width=25) (actual time=197.043..217.315 rows=90720 loops=1)"
+"        Sort Key: e.dependencia_adm"
+"        Sort Method: external merge  Disk: 3272kB"
+"        ->  Hash Semi Join  (cost=98.08..10048.88 rows=139718 width=25) (actual time=9.409..138.985 rows=90720 loops=1)"
+"              Hash Cond: (e.co_distrito = d.co_distrito)"
+"              ->  Seq Scan on escola e  (cost=0.00..7645.75 rows=285975 width=34) (actual time=0.051..57.113 rows=285975 loops=1)"
+"              ->  Hash  (cost=57.48..57.48 rows=3248 width=9) (actual time=0.814..0.814 rows=3248 loops=1)"
+"                    Buckets: 4096  Batches: 1  Memory Usage: 163kB"
+"                    ->  Seq Scan on distritos_regiao3 d  (cost=0.00..57.48 rows=3248 width=9) (actual time=0.004..0.302 rows=3248 loops=1)"
+"Planning time: 0.816 ms"
+"Execution time: 752.340 ms"

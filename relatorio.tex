@@ -293,41 +293,51 @@ ORDER BY e.qtd\_funcionarios;
     
     \vspace{0.5cm}
     \item 
-         Buscar o número de escolas com cada tipo de dependência administrativa: \texttt{Federal}, \texttt{Estadual}, \texttt{Municipal} e \texttt{Privada} em uma determinada \texttt{Região}. 
-    
+        Buscar o número de escolas de uma região com cada tipo de situação de funcionamento, dependência administrativa e oferta de matrícula.
+        
         \textbf{Campos de busca}: \texttt{Código da Região}.
         
-        \textbf{Campos de visualização do resultado}: Quantidade de \texttt{Escolas} na \texttt{Região}, quantidade de \texttt{Escolas Federais}, quantidade de \texttt{Escolas Estaduais}, quantidade de \texttt{Escolas Municipais} e quantidade de \texttt{Escolas Privadas}.
+        \textbf{Campos de visualização do resultado}: Quantidade de \texttt{Escolas} na \texttt{Região}, e desta região a quantidade de escolas \texttt{Em Atividade}, \texttt{Paralisada}, \texttt{Extinta}, \texttt{Federal}, \texttt{Estadual}, \texttt{Municipal}, \texttt{Privada} e com cada tipo de oferta de matrícula.
         
         \textbf{Operadores das condições}: \texttt{Código da Região} (\texttt{=}).
         
         \textbf{SQL}:
         \begin{Verbatim}[commandchars=\\\{\}]
-SELECT count(e.co_escola) as qtd_escolas, (
-        SELECT count(e2.co_escola)
-        FROM escola e2
-        WHERE e2.dependencia_adm = 'Federal'
-    ) as qtd_federal, (
-        SELECT count(e3.co_escola)
-        FROM escola e3
-        WHERE e3.dependencia_adm = 'Estadual'
-    ) as qtd_estadual, (
-        SELECT count(e4.co_escola)
-        FROM escola e4
-        WHERE e4.dependencia_adm = 'Municipal'
-    ) as qtd_municipal, (
-        SELECT count(e5.co_escola)
-        FROM escola e5
-        WHERE e5.dependencia_adm = 'Privada'
-    ) as qtd_privada
+SELECT
+    GROUPING(e.bercario) g\_bercario, GROUPING(e.creche) g\_creche, 
+    GROUPING(e.pre\_escola) g\_pe,
+    GROUPING(e.ens\_fundamental\_anos\_iniciais) g\_efi,
+    GROUPING(e.ens\_fundamental\_anos\_finais) g\_efii, 
+    GROUPING(e.ens\_medio\_normal) g\_emn,
+    GROUPING(e.ens\_medio\_integrado) g\_emi, 
+    GROUPING(e.situacao\_funcionamento) g\_situacao,
+    GROUPING(e.dependencia\_adm) g\_dep, 
+    GROUPING(e.localizacao) g\_localizacao,
+    e.bercario, e.creche, e.pre\_escola, e.ens\_fundamental\_anos\_iniciais,
+    e.ens\_fundamental\_anos\_finais, e.ens\_medio\_normal,
+    e.ens\_medio\_integrado,e.situacao\_funcionamento, e.dependencia\_adm, 
+    e.localizacao, count(e.co\_escola) as qtd\_escolas
 FROM escola e
-JOIN distrito d on e.co_distrito = d.co_distrito
-JOIN municipio m on d.co_municipio = m.co_municipio
-JOIN microrregiao m2 on m.co_microrregiao = m2.co_microrregiao
-JOIN mesorregiao m3 on m2.co_mesorregiao = m3.co_mesorregiao
-JOIN uf u on m3.co_uf = u.co_uf
-JOIN regiao r on u.co_regiao = r.co_regiao
-WHERE r.co_regiao = \textcolor{MidnightBlue}{<codigo_regiao>};
+JOIN distrito d on e.co\_distrito = d.co\_distrito
+JOIN municipio m on d.co\_municipio = m.co\_municipio
+JOIN microrregiao m2 on m.co\_microrregiao = m2.co\_microrregiao
+JOIN mesorregiao m3 on m2.co\_mesorregiao = m3.co\_mesorregiao
+JOIN uf u on m3.co\_uf = u.co\_uf
+JOIN regiao r on u.co\_regiao = r.co\_regiao
+WHERE r.co\_regiao = \textcolor{MidnightBlue}{<codigo_regiao>};
+GROUP BY GROUPING SETS (
+    (e.situacao\_funcionamento),
+    (e.dependencia\_adm),
+    (e.localizacao),
+    (e.bercario),
+    (e.creche),
+    (e.pre\_escola),
+    (e.ens\_fundamental\_anos\_iniciais),
+    (e.ens\_fundamental\_anos\_finais),
+    (e.ens\_medio\_normal),
+    (e.ens\_medio\_integrado),
+    ()
+);
         \end{Verbatim}
         
 \end{enumerate}
@@ -399,7 +409,6 @@ Conforme o esperado, devido a muitos JOINs, o tempo da consulta foi ruim. Por co
 
 Analisando o plano de execução, podemos observar que a \texttt{qtd\_funcionarios} proveniente da tabela \texttt{Escola} foi utilizada para ordenador os resultados obtidos e que o método de ordenação adotado foi o \texttt{quicksort} 
 
-\pagebreak
 
 \subsubsection{Operador IN}
 
@@ -607,11 +616,13 @@ Podemos observar que o tempo de execução caiu, porém não significativamente,
 
 A última otimização realizada foi a criação de um índice na coluna \texttt{co\_distrito} da tabela \texttt{Escola}. A SQL utilizada para a criação do índice e o tempo de execução podem ser observados a seguir:
 
+\vspace{0.25cm}
 \begin{verbatim}
-CREATE INDEX e_co_distrito_index 
-ON escola(co_distrito)
-3 secs 607 msec.
+    CREATE INDEX e_co_distrito_index 
+    ON escola(co_distrito)
+    3 secs 607 msec.
 \end{verbatim}
+\vspace{0.25cm}
 
 Realizando novamente a mesma consulta do item anterior, observamos os seguintes resultados:
 
@@ -668,12 +679,14 @@ Na Tabela 1 podemos observar as diferenças, em porcentagem, dos tempos de execu
 
 \subsection{Consulta 2 - Quantidade de Escolas de cada Dependência Administrativa}
 
-A segunda consulta também foi inicialmente realizada com o operador \texttt{JOIN}. Nesta consulta foram utilizadas subconsultas correlatas na cláusula do \texttt{SELECT} para que fosse possível recuperar as quantidades de cada dependência de uma região em uma única consulta. Para fins de teste, utilizaremos o seguinte dado como parâmetro para realização das consultas: 
+A segunda consulta também foi inicialmente realizada com o operador \texttt{JOIN}. Nesta consulta foi utilizada a cláusula \texttt{GROUP BY GROUPING SETS}, a qual realiza o agrupamento dos resultados de acordo com o específicado (no caso por situação de funcionamento, dependência administrativa e cada tipo de oferta de matrícula). O parênteses vazio na última linha do \texttt{GROUPING SETS} serve para recuperar o total de escolas. Para fins de teste, utilizaremos o seguinte dado como parâmetro para realização das consultas: 
 \begin{itemize}
     \item codigo\_regiao = 3 (Sudeste)
 \end{itemize}
 
-\subsubsection{Com JOIN}
+\subsubsection{Operador JOIN}
+
+O primeiro teste foi realizado com o operador \texttt{JOIN}.
 
 \vspace{0.5cm}
 \begin{flushleft}
@@ -681,38 +694,47 @@ A segunda consulta também foi inicialmente realizada com o operador \texttt{JOI
 \end{flushleft}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-SELECT count(e.co_escola) as qtd_escolas, (
-        SELECT count(e2.co_escola)
-        FROM escola e2
-        WHERE e2.dependencia_adm = \textcolor{Red}{'Federal'}
-    ) as qtd_federal, (
-        SELECT count(e3.co_escola)
-        FROM escola e3
-        WHERE e3.dependencia_adm = \textcolor{Red}{'Estadual'}
-    ) as qtd_estadual, (
-        SELECT count(e4.co_escola)
-        FROM escola e4
-        WHERE e4.dependencia_adm = \textcolor{Red}{'Municipal'}
-    ) as qtd_municipal, (
-        SELECT count(e5.co_escola)
-        FROM escola e5
-        WHERE e5.dependencia_adm = \textcolor{Red}{'Privada'}
-    ) as qtd_privada
+SELECT
+    GROUPING(e.bercario) g\_bercario, GROUPING(e.creche) g\_creche, 
+    GROUPING(e.pre\_escola) g\_pe,
+    GROUPING(e.ens\_fundamental\_anos\_iniciais) g\_efi,
+    GROUPING(e.ens\_fundamental\_anos\_finais) g\_efii, 
+    GROUPING(e.ens\_medio\_normal) g\_emn,
+    GROUPING(e.ens\_medio\_integrado) g\_emi, 
+    GROUPING(e.situacao\_funcionamento) g\_situacao,
+    GROUPING(e.dependencia\_adm) g\_dep, 
+    GROUPING(e.localizacao) g\_localizacao,
+    e.bercario, e.creche, e.pre\_escola, e.ens\_fundamental\_anos\_iniciais,
+    e.ens\_fundamental\_anos\_finais, e.ens\_medio\_normal,
+    e.ens\_medio\_integrado,e.situacao\_funcionamento, e.dependencia\_adm, 
+    e.localizacao, count(e.co\_escola) as qtd\_escolas
 FROM escola e
-JOIN distrito d on e.co_distrito = d.co_distrito
-JOIN municipio m on d.co_municipio = m.co_municipio
-JOIN microrregiao m2 on m.co_microrregiao = m2.co_microrregiao
-JOIN mesorregiao m3 on m2.co_mesorregiao = m3.co_mesorregiao
-JOIN uf u on m3.co_uf = u.co_uf
-JOIN regiao r on u.co_regiao = r.co_regiao
-WHERE r.co_regiao = \textcolor{Red}{3};
+JOIN distrito d on e.co\_distrito = d.co\_distrito
+JOIN municipio m on d.co\_municipio = m.co\_municipio
+JOIN microrregiao m2 on m.co\_microrregiao = m2.co\_microrregiao
+JOIN mesorregiao m3 on m2.co\_mesorregiao = m3.co\_mesorregiao
+JOIN uf u on m3.co\_uf = u.co\_uf
+JOIN regiao r on u.co\_regiao = r.co\_regiao
+WHERE r.co\_regiao = \textcolor{Red}{3};
+GROUP BY GROUPING SETS (
+    (e.situacao\_funcionamento),
+    (e.dependencia\_adm),
+    (e.localizacao),
+    (e.bercario),
+    (e.creche),
+    (e.pre\_escola),
+    (e.ens\_fundamental\_anos\_iniciais),
+    (e.ens\_fundamental\_anos\_finais),
+    (e.ens\_medio\_normal),
+    (e.ens\_medio\_integrado),
+    ()
+);
 \end{Verbatim}
 
 \begin{flushleft}
 \textbf{TEMPO DE EXECUÇÃO}\\
 \end{flushleft}
-2 secs 522 msec.\\
-1 rows affected.\\
+4 secs 206 msec.\\
 
 \begin{flushleft}
 \textbf{PLANO DE EXECUÇÃO}\\
@@ -725,13 +747,11 @@ WHERE r.co_regiao = \textcolor{Red}{3};
     \label{fig:diagrama}
 \end{figure}
 
-Podemos observar que o plano de execução foi realizado baseado em agregação, ou seja, foi realizada uma agregação do retorno de cada subconsulta correlata com a junção entre todas as tabelas para recuperar os dados da região especificada. O retorno de cada subconsulta correlata foi armazenado em uma variável, como se cada uma destas tivesse seu próprio plano de execução (InitPlan 1, 2, 3 e 4).
+Podemos observar no plano de execução que o índice criado no código do \texttt{Distrito} (\texttt{e\_co\_distrito\_index} para otimizar a consulta um, também foi utilizado por esta consulta. Logo, este índice também foi responsável pelo baixo tempo de execução inicial desta consulta.
 
-Apesar de todas as junções e agregações, o tempo de execução foi relativamente rápido, apenas 2 segundos e 522 milissegundos.
+\subsubsection{Operador IN}
 
-\subsubsection{Com IN}
-
-Com intuíto de diminuir o tempo de execução modificamos a consulta para a utilizarmos o operador \texttt{IN} ao invés do operador \texttt{JOIN}, embora este já fosse bem pequeno.
+Com intuíto de diminuir o tempo de execução modificamos a consulta para a utilizarmos o operador \texttt{IN} ao invés do operador \texttt{JOIN}.
 
 \vspace{0.5cm}
 
@@ -740,52 +760,61 @@ Com intuíto de diminuir o tempo de execução modificamos a consulta para a uti
 \end{flushleft}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-SELECT count(e.co_escola) as qtd_escolas, (
-        SELECT count(e2.co_escola)
-        FROM escola e2
-        WHERE e2.dependencia_adm = \textcolor{Red}{'Federal'}
-    ) as qtd_federal, (
-        SELECT count(e3.co_escola)
-        FROM escola e3
-        WHERE e3.dependencia_adm = \textcolor{Red}{'Estadual'}
-    ) as qtd_estadual, (
-        SELECT count(e4.co_escola)
-        FROM escola e4
-        WHERE e4.dependencia_adm = \textcolor{Red}{'Municipal'}
-    ) as qtd_municipal, (
-        SELECT count(e5.co_escola)
-        FROM escola e5
-        WHERE e5.dependencia_adm = \textcolor{Red}{'Privada'}
-    ) as qtd_privada
+SELECT
+    GROUPING(e.bercario) g\_bercario, GROUPING(e.creche) g\_creche, 
+    GROUPING(e.pre\_escola) g\_pe,
+    GROUPING(e.ens\_fundamental\_anos\_iniciais) g\_efi,
+    GROUPING(e.ens\_fundamental\_anos\_finais) g\_efii, 
+    GROUPING(e.ens\_medio\_normal) g\_emn,
+    GROUPING(e.ens\_medio\_integrado) g\_emi, 
+    GROUPING(e.situacao\_funcionamento) g\_situacao,
+    GROUPING(e.dependencia\_adm) g\_dep, 
+    GROUPING(e.localizacao) g\_localizacao,
+    e.bercario, e.creche, e.pre\_escola, e.ens\_fundamental\_anos\_iniciais,
+    e.ens\_fundamental\_anos\_finais, e.ens\_medio\_normal,
+    e.ens\_medio\_integrado,e.situacao\_funcionamento, e.dependencia\_adm, 
+    e.localizacao, count(e.co\_escola) as qtd\_escolas
 FROM escola e
-WHERE e.co_distrito IN (
-    SELECT d.co_distrito
+WHERE e.co\_distrito IN (
+    SELECT d.co\_distrito
     FROM distrito d
-    WHERE d.co_municipio IN (
-        SELECT m.co_municipio
+    WHERE d.co\_municipio IN (
+        SELECT m.co\_municipio
         FROM municipio m
-        WHERE m.co_microrregiao IN (
-            SELECT mi.co_microrregiao
+        WHERE m.co\_microrregiao IN (
+            SELECT mi.co\_microrregiao
             FROM microrregiao mi
-            WHERE mi.co_mesorregiao IN (
-                SELECT me.co_mesorregiao
+            WHERE mi.co\_mesorregiao IN (
+                SELECT me.co\_mesorregiao
                 FROM mesorregiao me
-                WHERE me.co_uf IN (
-                    SELECT u.co_uf
+                WHERE me.co\_uf IN (
+                    SELECT u.co\_uf
                     FROM uf u
-                    WHERE u.co_regiao = \textcolor{Red}{3}
+                    WHERE u.co\_regiao = \textcolor{Red}{3};
                 )
             )
         )
     )
+)
+GROUP BY GROUPING SETS (
+    (e.situacao\_funcionamento),
+    (e.dependencia\_adm),
+    (e.localizacao),
+    (e.bercario),
+    (e.creche),
+    (e.pre\_escola),
+    (e.ens\_fundamental\_anos\_iniciais),
+    (e.ens\_fundamental\_anos\_finais),
+    (e.ens\_medio\_normal),
+    (e.ens\_medio\_integrado),
+    ()
 );
 \end{Verbatim}
 
 \begin{flushleft}
 \textbf{TEMPO DE EXECUÇÃO}\\
 \end{flushleft}
-1 secs 679 msec.\\
-1 rows affected.\\
+2 secs 476 msec.\\
 
 \begin{flushleft}
 \textbf{PLANO DE EXECUÇÃO}\\
@@ -798,28 +827,125 @@ WHERE e.co_distrito IN (
     \label{fig:diagrama}
 \end{figure}
 
-Podemos observar que o tempo de execução sofreu uma redução de aproximadamente 1 segundo. Queda significava se observarmos que este valor representa aproximadamente 33\% do original.
+Podemos observar que o tempo de execução sofreu uma redução de 1 sec 730 msec. Queda significava se observarmos que este valor representa uma redução de aproximadamente 41\% em relação ao tempo anterior.
 
-\pagebreak
-Na Tabela 2 podemos observar as comparações entre os tempos de execução de cada um dos testes realizados para a consulta 2.
+%---------------------------------
+
+\subsubsection{Materialized View}
+
+Observamos que a criação de views com os códigos dos distritos de cada estado foram responsáveis por uma melhoria significativa no tempo de execução da consulta 1. Logo, a última otimização realizada para a segunda consulta foi a criação de \texttt{Materialized Views} contendo os distritos (código e nome do distrito, além do código de seu município) de cada região. O intuito desta alteração foi reduzir ainda mais o tempo da consulta, mesmo que já pequeno, visto que para a aplicação quanto mais rápido melhor.
+
+\vspace{0.5cm}
+
+\begin{flushleft}
+\textbf{CONSULTA SQL - View}\\
+\end{flushleft}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+SELECT
+SELECT
+    GROUPING(e.bercario) g\_bercario, GROUPING(e.creche) g\_creche, 
+    GROUPING(e.pre\_escola) g\_pe,
+    GROUPING(e.ens\_fundamental\_anos\_iniciais) g\_efi,
+    GROUPING(e.ens\_fundamental\_anos\_finais) g\_efii, 
+    GROUPING(e.ens\_medio\_normal) g\_emn,
+    GROUPING(e.ens\_medio\_integrado) g\_emi, 
+    GROUPING(e.situacao\_funcionamento) g\_situacao,
+    GROUPING(e.dependencia\_adm) g\_dep, 
+    GROUPING(e.localizacao) g\_localizacao,
+    e.bercario, e.creche, e.pre\_escola, e.ens\_fundamental\_anos\_iniciais,
+    e.ens\_fundamental\_anos\_finais, e.ens\_medio\_normal,
+    e.ens\_medio\_integrado,e.situacao\_funcionamento, e.dependencia\_adm, 
+    e.localizacao, count(e.co\_escola) as qtd\_escolas
+FROM escola e
+WHERE e.co\_distrito IN (
+    SELECT d.co\_distrito
+    FROM distritos\_regiao3 d
+)
+GROUP BY GROUPING SETS (
+    (e.situacao\_funcionamento),
+    (e.dependencia\_adm),
+    (e.localizacao),
+    (e.bercario),
+    (e.creche),
+    (e.pre\_escola),
+    (e.ens\_fundamental\_anos\_iniciais),
+    (e.ens\_fundamental\_anos\_finais),
+    (e.ens\_medio\_normal),
+    (e.ens\_medio\_integrado),
+    ()
+);
+\end{Verbatim}
+
+\begin{flushleft}
+\textbf{TEMPO DE EXECUÇÃO}\\
+\end{flushleft}
+1 secs 644 msec.\\
+
+\begin{flushleft}
+\textbf{PLANO DE EXECUÇÃO}\\
+\end{flushleft}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,height=\textwidth,keepaspectratio]{2-view.JPG}
+    \caption{Consulta 2 - View}
+    \label{fig:diagrama}
+\end{figure}
+
+Podemos observar pelo plano de execução que este ficou bem mais simples em relação aos outros, visto que agora bastou uma busca sequencial na view da região especificada, sem ter que realizar todos os joins com as outras tabelas.
+
+\subsubsection{Conclusão - Consulta 2}
+
+Com as otimizações realizadas, conseguimos uma melhora total de 60,91\% no tempo de execução da consulta. Na Tabela 2 podemos observar as comparações entre os tempos de execução de cada um dos testes realizados para a consulta 2:
 
 \begin{table}[htbp]
   \centering
-  \caption{Comparação Consulta 2}
+  \caption{Comparação - Consulta 2}
     \resizebox{\textwidth}{!}{\begin{tabular}{|l|c|c|c|}
-    \hline
     \toprule
-    \textbf{Testes} & \textbf{Tempo (ms)} & \textbf{Diferença com Anterior (\%)} & \multicolumn{1}{l|}{\textbf{Diferença com Original (\%)}} \\
     \hline
+    \textbf{Testes} & \textbf{Tempo (ms)} & \textbf{Diferença com Anterior (\%)} & \multicolumn{1}{l|}{\textbf{Diferença com Original (\%)}} \\
     \midrule
-    Consulta Inicial (JOIN) & 2522  & -     & - \\
+    \hline
+    Consulta Inicial (JOIN) & 4206  & -     & - \\
     \midrule
-    IN    & 1679  & 33,55 & 33,55 \\
+    IN    & 2476  & 41,13 & 41,13 \\
+    \midrule
+    MATERIALIZED VIEW & 1644  & 33,6  & 60,91 \\
     \bottomrule
     \hline
     \end{tabular}}%
-  \label{tab:compconsulta2}%
+  \label{tab:addlabel}%
 \end{table}%
+
+
+\section{Segurança e Controle de Acesso}
+
+Nesta seção iremos mostrar e analisar as técnicas utilizadas no banco para segurança e controle de acesso aos dados. Iremos citar as técnicas utilizadas para prevenção de SQL Injection e os usuários criados para o controle das operações permitidas sobre o banco das escolas.
+
+\subsection{Prevenção de SQL Injection}
+
+Para a prevenção de SQL Injection, foram utilizadas basicamente duas técnicas: a utilização de \texttt{stored procedures} e de \texttt{prepared statements} para tratamento das consultas SQL.
+
+\begin{flushleft}
+\textbf{PROCEDURES}\\
+\end{flushleft}
+
+
+
+\begin{flushleft}
+\textbf{PREPARED STATEMENT}\\
+\end{flushleft}
+
+
+\subsection{Usuários para Controle de Acesso}
+
+Administrador
+
+Quem pode realizar SELECT, INSERT, DELETE, UPDATE....
+
+
 
 
 
