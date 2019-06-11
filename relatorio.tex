@@ -343,6 +343,46 @@ GROUP BY GROUPING SETS (
 \end{enumerate}
 
 
+\section{Populando o BD}
+
+Nesta seção será apresentado o modo como foi realizada a adição de dados ao banco de dados, bem como algumas informações técnicas de cada tabela. Vamos começar falando sobre de onde os dados foram retirados. Os dados do banco de escolas brasileiras foram retirados do \texttt{Microdados do INEP} do Censo Escolar 2018 (\url{http://inep.gov.br/microdados} . Como os dados vêm em uma tabela no excel, foi criado um script em PHP percorrendo a tabela e inserindo os dados no banco. Foram criados outros scripts também sobre outras tabelas auxiliares para a extração das informações dos \texttt{Distritos}, \texttt{Municípios}, \texttt{Microrregiões}, \texttt{Mesorregiões}, \texttt{Estados} e \texttt{Regiões}.
+
+Quanto ao volume de dados final do banco, ou seja, o número de tuplas e o total em bytes de cada tabela, podemos visualizar na tabela abaixo:
+
+\begin{table}[H]
+  \centering
+  \caption{Informações Tabelas}
+    \begin{tabular}{|c|c|c|}
+    \toprule
+    \hline
+    \textbf{Nome da Tabela} & \textbf{Nº de Tuplas} & \textbf{Tamanho} \\
+    \midrule
+    \hline
+    \textbf{Escola} & 285975 & 58 MB \\
+    \midrule
+    \textbf{Distrito} & 10302 & 976 kB \\
+    \midrule
+    \textbf{Municipio} & 5570  & 744 kB \\
+    \midrule
+    \textbf{Microrregiao} & 558   & 88 kB \\
+    \midrule
+    \textbf{Mesorregiao} & 137   & 56 kB \\
+    \midrule
+    \textbf{Uf} & 27    & 24 kB \\
+    \midrule
+    \textbf{Regiao} & 5     & 24 kB \\
+    \midrule
+    \textbf{Total} & 302574 & 59,86 MB \\
+    \bottomrule
+    \hline
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+
+
+
+
+
 \section{Otimização das Consultas}
 
 Nesta seção iremos analisar o desempenho de cada uma das consultas especificadas na seção 3 (\texttt{Especificação das Consultas}). Utilizando técnicas de indexação e otimização, tentaremos alcançar um aumento significativo no desempenho das consultas.
@@ -941,11 +981,59 @@ Para a prevenção de SQL Injection, foram utilizadas basicamente duas técnicas
 
 \subsection{Usuários para Controle de Acesso}
 
-Administrador
+Foram criados três usuários para realizar o controle de acesso ao bando de dados. Os usuários criados foram:
 
-Quem pode realizar SELECT, INSERT, DELETE, UPDATE....
+\begin{itemize}
+    \item \texttt{admin}
+    \item \texttt{gerente}
+    \item \texttt{diretor}
+    \item \texttt{cliente}
+\end{itemize}
 
+O \texttt{admin} possui todos os privilégios, ou seja, os privilégios de seleção, inserção, atualização e dele.ão sobre todas as tabelas d Abancolém disso, foi çespecifio cado o privilégio \texttt{CREATEROLE}, assim o \texttt{admin} pode criar outros usuários. Também foi especificado \texttt{GRANT OPTION}, deste modo, ele recebe o privilégio de conceder privilégios a outros usuários.
 
+À partir do \texttt{admin} foram criados os usuários \texttt{gerente}, \texttt{diretor} e \texttt{cliente}. Ao gerente foram dados os privilégios de seleção e atualização sobre todas as tabelas. Ao \texttt{diretor} foram concedidos os privilégios de seleção e inserção sobre todas as tabelas.
+
+Por fim, ao \texttt{cliente} foi apenas dado o privilégio de seleção sobre as tabelas. É importante ressaltar que a todos os três usuários criados foi especificada a opção \texttt{NOINHERIT}, ou seja, não herdam nenhum dos privilégios de cima.
+
+Para melhor visualizar os usuários criados, bem como cada privilégio concedido a cada um, podemos observar a tabela abaixo:
+
+\begin{table}[htbp]
+  \centering
+  \caption{Privilégios Usuários}
+    \begin{tabular}{|l|l|l|l|l|}
+    \toprule
+    \hline
+          & \textbf{admin} & \textbf{diretor} & \textbf{gerente} & \textbf{cliente} \\
+    \midrule
+    \hline
+    \textbf{escola} & S,I,U,D & S,I   & S,U   & S \\
+    \midrule
+    \textbf{distrito} & S,I,U,D & S,I   & S,U   & S \\
+    \midrule
+    \textbf{municipio} & S,I,U,D & S,I   & S,U   & S \\
+    \midrule
+    \textbf{microrregiao} & S,I,U,D & S,I   & S,U   & S \\
+    \midrule
+    \textbf{mesorregiao} & S,I,U,D & S,I   & S,U   & S \\
+    \midrule
+    \textbf{uf} & S,I,U,D & S,I   & S,U   & S \\
+    \midrule
+    \textbf{regiao} & S,I,U,D & S,I   & S,U   & S \\
+    \bottomrule
+    \hline
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+
+Além disso, foi criado também o diagrama de concessões, que nos permite visualizar melhor ainda os privilégios de cada usuário, bem como quem os concedeu:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.3]{arvore-privilegios.JPG}
+    \caption{Diagrama de Concessões}
+    \label{fig:diagrama}
+\end{figure}
 
 
 
