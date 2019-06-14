@@ -1,0 +1,120 @@
+/* =======================================================
+   Fontes
+   ======================================================= */
+
+    @import url('https://fonts.googleapis.com/css?family=Roboto+Slab');
+    @import url('https://fonts.googleapis.com/css?family=Oswald');
+    @import url('https://fonts.googleapis.com/css?family=Merriweather');
+    @import url('https://fonts.googleapis.com/css?family=Lato');
+    @import url('https://fonts.googleapis.com/css?family=Patua+One');
+    @import url('https://fonts.googleapis.com/css?family=Lobster');
+    @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600');
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600');
+    @import url('https://fonts.googleapis.com/css?family=Roboto:400,500');
+   
+   
+    body {
+   
+        /* font-family: 'Roboto Slab', serif; */
+        /* font-family: 'Oswald', sans-serif; */
+        /* font-family: 'Merriweather', serif; */
+        /* font-family: 'Lato', sans-serif; */
+        /* font-family: 'Open Sans', sans-serif; */
+        font-family: 'Montserrat', sans-serif;
+        /* font-family: 'Roboto', sans-serif; */
+
+    }
+
+    #resultado-busca, #secao-filtros, #nav-estatisticas, #estatisticas-gerais {
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    #busca {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+    }
+
+    .navbar-busca li:first-of-type {
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .select2-container--default .select2-results>.select2-results__options {
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 600;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__placeholder {
+        color: var(--cinza);
+        text-transform: uppercase;
+    }
+
+
+/* =======================================================
+   FONTES RESPONSIVAS
+   ======================================================= */
+
+section h1 {
+    --tt-key: h1;
+    font-size: 40px;
+}
+
+@keyframes h1 {
+    0%, 23.4375% {
+        font-size: 28px;
+    }
+    25.874999999999996% {
+        font-size: 30px;
+    }
+    64% {
+        font-size: 36px;
+    }
+    100% {
+        font-size: 40px;
+    }
+}
+
+section p {
+    --tt-key: p;
+    font-size: 17px;
+}
+
+@keyframes p {
+    0%, 26.5% {
+        font-size: 15px;
+    }
+    97.875% {
+        font-size: 17px;
+    }
+}
+
+
+section span[for=btn-start] {
+    --tt-key: span;
+    font-size: 17px;
+}
+
+@keyframes span {
+    0%, 26.5% {
+        font-size: 15px;
+    }
+    97.875% {
+        font-size: 17px;
+    }
+}
+
+section h2 {
+    --tt-key: h2;
+    font-size: 32px;
+}
+
+@keyframes h2 {
+    0%, 25.874999999999996% {
+        font-size: 20px;
+    }
+    64% {
+        font-size: 25px;
+    }
+    97.8125% {
+        font-size: 32px;
+    }
+}

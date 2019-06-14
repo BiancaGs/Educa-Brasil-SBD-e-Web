@@ -24,13 +24,33 @@
 \definecolor{bookColor}{cmyk}{0,0,0,0.90}  
 \color{bookColor}
 
-\lstset{
-breaklines=true,
-basicstyle=\small\ttfamily,
-columns=flexible,
+\lstset{upquote=true}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codepurple},
+    numberstyle=\numberstyle,
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize\ttfamily,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=10pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
 }
+\lstset{style=mystyle}
 
-
+\newcommand\numberstyle[1]{%
+    \footnotesize
+    \color{codegray}%
+    \ttfamily
+    \ifnum#1<10 0\fi#1 |%
+}
 
 
 
@@ -94,12 +114,12 @@ minus 1.5\fontdimen4\font
 
 \textbf{UNIVERSIDADE FEDERAL DE SÃO CARLOS\\CAMPUS SOROCABA\\\vspace{3cm} BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO\\\vspace{3cm}SISTEMAS DE BANCO DE DADOS\\
 Prof. Sahudy Montenegro González\\\vspace{3cm}
-PROJETO INTEGRADO\\Fase Intermediária\\\vspace{0.5cm}
+PROJETO INTEGRADO\\Fase Final\\\vspace{0.5cm}
 BASE DE DADOS BRASILEIRA\\TEMA 4 - Cadastro Brasileiro de Escolas \\\vspace{4.0cm}
 Bianca Gomes Rodrigues - 743512\\
 Pietro Zuntini Bonfim - 743588\\
 \\\vspace{3.5cm}
-Sorocaba-SP\\21 de Abril de 2019}
+Sorocaba-SP\\12 de Junho de 2019}
 
 \end{center}
 
@@ -972,11 +992,227 @@ Para a prevenção de SQL Injection, foram utilizadas basicamente duas técnicas
 \textbf{PROCEDURES}\\
 \end{flushleft}
 
+A primeira \textit{stored procedure} foi criada para utilização da consulta 1, que recupera as informações das escolas. Essa consulta também envolve, na aplicação, paginação, deslocamento e ordenação. O procedimento pode ser visualizado a seguir:
+
+\vspace{0.5cm}
+
+\begin{lstlisting}[ 
+    language=SQL,
+    deletekeywords={IDENTITY},
+    deletekeywords={[2]INT},
+    morekeywords={clustered},
+    framesep=8pt,
+    xleftmargin=40pt,
+    framexleftmargin=40pt,
+    frame=tb,
+    framerule=0pt,
+    basicstyle=\footnotesize
+]
+CREATE OR REPLACE FUNCTION recuperarEscolas( campoBusca varchar(100), codigoEstado varchar(2), limite int, deslocamento int, ordColuna int, ordDirecao varchar(4) )  
+RETURNS TABLE (
+    co_escola escola.co_escola%TYPE, nome_escola escola.nome_escola%TYPE,
+    situacao_funcionamento escola.situacao_funcionamento%TYPE,
+    dependencia_adm escola.dependencia_adm%TYPE, 
+    bercario escola.bercario%TYPE,
+    creche escola.creche%TYPE, pre_escola escola.pre_escola%TYPE,
+    ens_fundamental_anos_iniciais escola.ens_fundamental_anos_iniciais%TYPE,
+    ens_fundamental_anos_finais escola.ens_fundamental_anos_finais%TYPE,
+    ens_medio_normal escola.ens_medio_normal%TYPE,
+    ens_medio_integrado escola.ens_medio_integrado%TYPE
+) AS $$
+DECLARE
+    sql text := 'SELECT
+        e.co_escola, e.nome_escola, e.situacao_funcionamento, e.dependencia_adm, e.bercario, e.creche, e.pre_escola,
+        e.ens_fundamental_anos_iniciais, e.ens_fundamental_anos_finais, e.ens_medio_normal, e.ens_medio_integrado
+    FROM escola e ';
+BEGIN
+
+    sql := sql || 'WHERE true ';
+
+    IF codigoEstado IS NOT NULL THEN
+        -- Filtra apenas os distritos do estado especificado 
+        sql := sql || 'AND co_distrito IN (
+            SELECT co_distrito
+            FROM distritos' || codigoEstado || ' d)';
+    END IF;
+
+    -- Campo de Busca
+    sql := sql || '
+        AND e.nome_escola LIKE ' || quote_literal('%' || campoBusca || '%') || '
+        ORDER BY ';
+
+    -- Ordenacao
+    CASE ordColuna
+        WHEN 0 THEN
+            sql := sql || 'e.co_escola ';
+        WHEN 1 THEN
+            sql := sql || 'e.nome_escola ';
+        WHEN 2 THEN
+            sql := sql || 'e.situacao_funcionamento ';
+        WHEN 3 THEN
+            sql := sql || 'e.dependencia_adm ';
+    END CASE;
+
+    -- Limite e Deslocamento
+    sql := sql || ordDirecao || '
+        LIMIT ' || limite || ' OFFSET ' || deslocamento;
+
+    -- Retorna a Query
+    RETURN QUERY EXECUTE sql;
+END
+$$ LANGUAGE plpgsql;
+\end{lstlisting}
+
+\vspace{0.5cm}
+
+Os exemplos de chamada da função seriam:
+
+\begin{lstlisting}[ 
+    language=SQL,
+    deletekeywords={IDENTITY},
+    deletekeywords={[2]INT},
+    morekeywords={clustered},
+    framesep=8pt,
+    xleftmargin=40pt,
+    framexleftmargin=40pt,
+    frame=tb,
+    framerule=0pt,
+    basicstyle=\footnotesize
+]
+-- Exemplos de chamada
+SELECT * FROM recuperarEscolas('UNIDADE', NULL, 100, 0, 1, 'asc');  -- Brasil
+SELECT * FROM recuperarEscolas('UNIDADE', '35', 10, 100, 1, 'asc'); -- SP
+\end{lstlisting}
 
 
-\begin{flushleft}
-\textbf{PREPARED STATEMENT}\\
-\end{flushleft}
+\vspace{0.5cm}
+A segunda \textit{stored procedure} criada foi para a consulta 2, ou seja, consulta para recuperar as estatísicas. Criamos uma procedure capaz de lidar com todos os casos possíveis de consulta na aplicação: estatíticas de todo o Brasil, de uma região, de um estado, ou de um município específicos. A procedure pode ser visualizada no código a seguir:
+
+\vspace{0.5cm}
+
+\begin{lstlisting}[ 
+    language=SQL,
+    deletekeywords={IDENTITY},
+    deletekeywords={[2]INT},
+    morekeywords={clustered},
+    framesep=8pt,
+    xleftmargin=40pt,
+    framexleftmargin=40pt,
+    frame=tb,
+    framerule=0pt,
+    basicstyle=\footnotesize
+]
+CREATE OR REPLACE FUNCTION recuperarEstatisticas( brasil boolean, codigoRegiao varchar(1), codigoEstado varchar(2), codigoMunicipio varchar(7) )
+RETURNS TABLE ( 
+    g_bercario integer, g_creche integer, g_pe integer, g_efi integer,
+    g_efii integer, g_emn integer, g_emi integer, g_situacao integer,
+    g_dep integer, g_localizacao integer, bercario escola.bercario%TYPE, 
+    creche escola.creche%TYPE, pre_escola escola.pre_escola%TYPE, 
+    ens_fundamental_anos_iniciais escola.ens_fundamental_anos_iniciais%TYPE, 
+    ens_fundamental_anos_finais escola.ens_fundamental_anos_finais%TYPE, 
+    ens_medio_normal escola.ens_medio_normal%TYPE, 
+    ens_medio_integrado escola.ens_medio_integrado%TYPE, 
+    situacao_funcionamento escola.situacao_funcionamento%TYPE,
+    dependencia_adm escola.dependencia_adm%TYPE, localizacao escola.localizacao%TYPE, 
+    qtd_escolas bigint 
+) AS $$
+DECLARE
+    sql text := 'SELECT
+        GROUPING(e.bercario) g_bercario, GROUPING(e.creche) g_creche, 
+        GROUPING(e.pre_escola) g_pe, 
+        GROUPING(e.ens_fundamental_anos_iniciais) g_efi,
+        GROUPING(e.ens_fundamental_anos_finais) g_efii, 
+        GROUPING(e.ens_medio_normal) g_emn, 
+        GROUPING(e.ens_medio_integrado) g_emi, 
+        GROUPING(e.situacao_funcionamento) g_situacao,
+        GROUPING(e.dependencia_adm) g_dep, 
+        GROUPING(e.localizacao) g_localizacao,
+        e.bercario, e.creche, e.pre_escola, e.ens_fundamental_anos_iniciais,
+        e.ens_fundamental_anos_finais, e.ens_medio_normal,
+        e.ens_medio_integrado,e.situacao_funcionamento, 
+        e.dependencia_adm, e.localizacao, count(e.co_escola) as qtd_escolas
+    FROM escola e';
+    g_text text := ' GROUP BY GROUPING SETS (
+        (e.situacao_funcionamento),
+        (e.dependencia_adm),
+        (e.localizacao),
+        (e.bercario),
+        (e.creche),
+        (e.pre_escola),
+        (e.ens_fundamental_anos_iniciais),
+        (e.ens_fundamental_anos_finais),
+        (e.ens_medio_normal),
+        (e.ens_medio_integrado),
+        ()
+    )';
+BEGIN
+    IF brasil IS NULL THEN
+
+        IF codigoRegiao IS NOT NULL THEN
+
+            -- SQL Regiao
+            sql := sql || ' WHERE e.co_distrito IN (
+                SELECT d.co_distrito
+                FROM distritos_regiao' || $2 || ' d)';
+
+            RETURN QUERY EXECUTE sql || g_text
+            USING codigoRegiao;
+
+        ELSIF codigoEstado IS NOT NULL THEN
+
+            -- SQL Estado
+            sql := sql || ' WHERE e.co_distrito IN (
+                    SELECT d.co_distrito
+                    FROM distritos' || $3 || ' d)';
+
+            RETURN QUERY EXECUTE sql || g_text
+            USING codigoEstado;
+
+
+        ELSIF codigoMunicipio IS NOT NULL THEN
+
+            -- SQL Municipio
+            sql := sql || ' WHERE e.co_distrito IN (
+                    SELECT d.co_distrito
+                    FROM distrito d
+                    WHERE d.co_municipio = ' || $4 || ')';
+
+            RETURN QUERY EXECUTE sql || g_text
+            USING codigoMunicipio;
+
+        END IF;
+
+    ELSE
+        -- SQL Brasil
+        RETURN QUERY EXECUTE sql || g_text;
+    END IF;
+
+END
+$$ LANGUAGE plpgsql;
+\end{lstlisting}
+
+\vspace{0.5cm}
+
+Os exemplos de chamada da função seriam:
+
+\begin{lstlisting}[ 
+    language=SQL,
+    deletekeywords={IDENTITY},
+    deletekeywords={[2]INT},
+    morekeywords={clustered},
+    framesep=8pt,
+    xleftmargin=40pt,
+    framexleftmargin=40pt,
+    frame=tb,
+    framerule=0pt,
+    basicstyle=\footnotesize
+]
+-- Exemplos de chamada
+SELECT * FROM recuperarEstatisticas(true, NULL, NULL, NULL);      -- Brasil
+SELECT * FROM recuperarEstatisticas(NULL, '4', NULL, NULL);       -- Regiao
+SELECT * FROM recuperarEstatisticas(NULL, NULL, '35', NULL);      -- Estado
+SELECT * FROM recuperarEstatisticas(NULL, NULL, NULL, '3552205'); -- Municipio
+\end{lstlisting}
 
 
 \subsection{Usuários para Controle de Acesso}
